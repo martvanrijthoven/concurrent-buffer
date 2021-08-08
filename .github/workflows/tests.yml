@@ -1,0 +1,39 @@
+name: tests
+
+on:
+  push:
+    paths:
+      - "concurrentbuffer/**"
+      - "tests/**"
+  pull_request:
+    paths:
+      - "concurrentbuffer/**"
+      - "tests/**"
+
+env:
+  OS: ubuntu-latest
+  PYTHON_VERSION: "3.8"
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Generate coverage report
+        run: |
+          pip install pytest
+          pip install pytest-cov
+          pytest --cov=./concurrentbuffer --cov-report=xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          verbose: true
