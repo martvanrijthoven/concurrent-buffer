@@ -4,8 +4,8 @@ from typing import List
 from concurrentbuffer.message import MessageProcess
 from concurrentbuffer.worker import WorkerProcess
 
-from concurrentbufferexample.message import DataMessageProcess
-from concurrentbufferexample.worker import DataWorkerProcess
+from example.message import DataMessageProcess
+from example.worker import DataWorkerProcess
 
 """
 Example BufferIterator

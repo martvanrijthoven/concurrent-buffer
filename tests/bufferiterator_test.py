@@ -2,7 +2,7 @@ import numpy as np
 from concurrentbuffer.info import BufferInfo
 from concurrentbuffer.iterator import BufferIterator
 from concurrentbuffer.state import BufferState
-from concurrentbufferexample.factory import DataBufferFactory
+from example.factory import DataBufferFactory
 
 
 class TestBufferIterator:
