@@ -37,7 +37,7 @@ release = '0.0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 
-sys.path.insert(0, os.path.abspath('..'))  # Source code dir relative to this file
+sys.path.insert(0, os.path.abspath('../../'))  # Source code dir relative to this file
 
 extensions = [
     'sphinx.ext.autodoc',  # Core Sphinx library for auto html doc generation from docstrings
