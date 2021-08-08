@@ -7,3 +7,4 @@ nbsphinx
 ipython
 jupytext
 jupyter
+numpy
