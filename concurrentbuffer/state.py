@@ -27,7 +27,7 @@ def _lock_state_buffer(f):
 class BufferStateMemory:
     """Class that contains the states of buffers"""
 
-    def __init__(self, count: int, dtype: type, buffer: SharedMemory):
+    def __init__(self, count: int, dtype: type, lock: Lock, buffer: SharedMemory):
         """Init
 
         Args:
@@ -35,12 +35,11 @@ class BufferStateMemory:
             dtype (type): type of buffers
             buffer (SharedMemory): buffer that contains states
         """
-        
+
         self._count = count
         self._dtype = dtype
         self._buffer = buffer
-
-        self._lock = Lock()
+        self._lock = lock
 
         for id in range(self._count):
             self.update_buffer_id_to_free(buffer_id=id)

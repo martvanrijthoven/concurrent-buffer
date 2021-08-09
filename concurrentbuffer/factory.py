@@ -1,20 +1,41 @@
-from abc import abstractmethod
-from multiprocessing import Pipe, Queue
+import multiprocessing
 from typing import List
 
 from concurrentbuffer.info import BufferInfo
 from concurrentbuffer.manager import SharedBufferManager
 from concurrentbuffer.memory import BufferMemory
-from concurrentbuffer.message import STOP_MESSAGE, MessageProcess
+from concurrentbuffer.instructor import (
+    STOP_MESSAGE,
+    Instructor,
+    InstructorProcess,
+    get_instructor_process_class_object,
+)
 from concurrentbuffer.state import BufferStateMemory
-from concurrentbuffer.worker import WorkerProcess
+from concurrentbuffer.worker import (
+    Worker,
+    WorkerProcess,
+    get_worker_process_class_object,
+)
+
+
+# use spawn with pickable object
+# use spawn with build function
+# use fork 
+# use fork with build function
 
 
 class BufferFactory:
     """Factory that builds all the components"""
 
-
-    def __init__(self, cpus: int, buffer_info: BufferInfo, deterministic: bool = True):
+    def __init__(
+        self,
+        cpus: int,
+        buffer_info: BufferInfo,
+        instructor: Instructor,
+        worker: Worker,
+        context: str = "spawn",  # TODO make enum
+        deterministic: bool = True,
+    ):
         """Initialization
 
         Args:
@@ -25,10 +46,20 @@ class BufferFactory:
 
         self._cpus = cpus
         self._buffer_info = buffer_info
+        self._instructor = instructor
+        self._worker = worker
         self._deterministic = deterministic
 
-        self._message_queue = Queue(maxsize=self._buffer_info.count)
-        self._receiver, self._sender = Pipe() if self._deterministic else (None, None)
+        self._context = multiprocessing.get_context(context)
+
+        self._InstructorProcessClass = get_instructor_process_class_object(context)
+        self._WorkerProcessClass = get_worker_process_class_object(context)
+
+        self._message_queue = self._context.Queue(maxsize=self._buffer_info.count)
+        self._receiver, self._sender = (
+            self._context.Pipe() if self._deterministic else (None, None)
+        )
+        self._lock = self._context.Lock()
 
         self._init_shared_buffer_manager()
         self._init_buffer_state_memory()
@@ -64,6 +95,7 @@ class BufferFactory:
         self._buffer_state_memory = BufferStateMemory(
             count=self._buffer_info.count,
             dtype=self._buffer_info.dtype,
+            lock=self._lock,
             buffer=self._shared_buffer_manager.state_buffer,
         )
 
@@ -75,7 +107,7 @@ class BufferFactory:
         )
 
     def _init_message_process(self):
-        self._message_process = self._create_message_process()
+        self._message_process = self._create_instructor_process()
         self._message_process.start()
 
     def _init_worker_processes(self):
@@ -105,10 +137,23 @@ class BufferFactory:
         # shutdown manager
         self._shared_buffer_manager.shutdown()
 
-    @abstractmethod
-    def _create_message_process(self) -> MessageProcess:
-        """[summary]"""
+    def _create_instructor_process(self) -> InstructorProcess:
+        return self._InstructorProcessClass(
+            instructor=self._instructor,
+            buffer_state_memory=self._buffer_state_memory,
+            message_queue=self._message_queue,
+            buffer_id_sender=self.sender,
+        )
 
-    @abstractmethod
     def _create_worker_processes(self) -> List[WorkerProcess]:
-        """[summary]"""
+        worker_processes = []
+        for _ in range(self._cpus):
+            worker_process = self._WorkerProcessClass(
+                worker=self._worker,
+                buffer_shape=self._buffer_info.shape,
+                buffer_state_memory=self._buffer_state_memory,
+                buffer_memory=self._buffer_memory,
+                message_queue=self._message_queue,
+            )
+            worker_processes.append(worker_process)
+        return worker_processes
