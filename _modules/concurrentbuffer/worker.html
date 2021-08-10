@@ -122,22 +122,37 @@
               <div>
                 
   <h1>Source code for concurrentbuffer.worker</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
-<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span><span class="p">,</span> <span class="n">Queue</span>
+<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Queue</span>
+<span class="kn">from</span> <span class="nn">multiprocessing.context</span> <span class="kn">import</span> <span class="n">ForkContext</span><span class="p">,</span> <span class="n">ForkProcess</span><span class="p">,</span> <span class="n">SpawnContext</span><span class="p">,</span> <span class="n">SpawnProcess</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="kn">from</span> <span class="nn">concurrentbuffer.instructor</span> <span class="kn">import</span> <span class="n">BUFFER_ID_KEY</span><span class="p">,</span> <span class="n">STOP_MESSAGE</span>
 <span class="kn">from</span> <span class="nn">concurrentbuffer.memory</span> <span class="kn">import</span> <span class="n">BufferMemory</span>
-<span class="kn">from</span> <span class="nn">concurrentbuffer.message</span> <span class="kn">import</span> <span class="n">BUFFER_ID_KEY</span><span class="p">,</span> <span class="n">STOP_MESSAGE</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.process</span> <span class="kn">import</span> <span class="n">SubProcessObject</span>
 <span class="kn">from</span> <span class="nn">concurrentbuffer.state</span> <span class="kn">import</span> <span class="n">BufferStateMemory</span>
 
 
-<div class="viewcode-block" id="WorkerProcess"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.worker.WorkerProcess.html#concurrentbuffer.worker.WorkerProcess">[docs]</a><span class="k">class</span> <span class="nc">WorkerProcess</span><span class="p">(</span><span class="n">Process</span><span class="p">):</span>
+<div class="viewcode-block" id="Worker"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.worker.Worker.html#concurrentbuffer.worker.Worker">[docs]</a><span class="k">class</span> <span class="nc">Worker</span><span class="p">(</span><span class="n">SubProcessObject</span><span class="p">):</span>
+<div class="viewcode-block" id="Worker.create_data"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.worker.Worker.html#concurrentbuffer.worker.Worker.create_data">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">create_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;This method creates the data based on a message and puts it into a buffer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            message (dict): the message that includes instruction info for the creation of the data.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.ndarray: the created data.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div></div>
+
+
+<div class="viewcode-block" id="WorkerProcess"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.worker.WorkerProcess.html#concurrentbuffer.worker.WorkerProcess">[docs]</a><span class="k">class</span> <span class="nc">WorkerProcess</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Process that creates data and puts in into a shared memory buffer.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="WorkerProcess.__init__"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.worker.WorkerProcess.html#concurrentbuffer.worker.WorkerProcess.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
+        <span class="n">worker</span><span class="p">:</span> <span class="n">Worker</span><span class="p">,</span>
         <span class="n">buffer_shape</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
         <span class="n">buffer_state_memory</span><span class="p">:</span> <span class="n">BufferStateMemory</span><span class="p">,</span>
         <span class="n">buffer_memory</span><span class="p">:</span> <span class="n">BufferMemory</span><span class="p">,</span>
@@ -152,32 +167,40 @@
 <span class="sd">            message_queue (Queue): queue that receives messages from a MessageProcess that can be used to construct data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_worker</span> <span class="o">=</span> <span class="n">worker</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_shape</span> <span class="o">=</span> <span class="n">buffer_shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_state_memory</span> <span class="o">=</span> <span class="n">buffer_state_memory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_memory</span> <span class="o">=</span> <span class="n">buffer_memory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_message_queue</span> <span class="o">=</span> <span class="n">message_queue</span></div>
 
-<div class="viewcode-block" id="WorkerProcess.run"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.worker.WorkerProcess.html#concurrentbuffer.worker.WorkerProcess.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_worker</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_message_queue</span><span class="o">.</span><span class="n">get</span><span class="p">,</span> <span class="n">STOP_MESSAGE</span><span class="p">):</span>
             <span class="n">buffer_id</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="n">BUFFER_ID_KEY</span><span class="p">]</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_data</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_worker</span><span class="o">.</span><span class="n">create_data</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_memory</span><span class="o">.</span><span class="n">update_buffer</span><span class="p">(</span><span class="n">buffer_id</span><span class="o">=</span><span class="n">buffer_id</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
-
             <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_state_memory</span><span class="o">.</span><span class="n">update_buffer_id_to_available</span><span class="p">(</span><span class="n">buffer_id</span><span class="o">=</span><span class="n">buffer_id</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="WorkerProcess.create_data"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.worker.WorkerProcess.html#concurrentbuffer.worker.WorkerProcess.create_data">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">create_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;This method creates the data based on a message and puts it into a buffer.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            message (dict): the message that includes instruction info for the creation of the data.</span>
+<div class="viewcode-block" id="WorkerForkProcess"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.worker.WorkerForkProcess.html#concurrentbuffer.worker.WorkerForkProcess">[docs]</a><span class="k">class</span> <span class="nc">WorkerForkProcess</span><span class="p">(</span><span class="n">WorkerProcess</span><span class="p">,</span> <span class="n">ForkProcess</span><span class="p">):</span>
+<div class="viewcode-block" id="WorkerForkProcess.__init__"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.worker.WorkerForkProcess.html#concurrentbuffer.worker.WorkerForkProcess.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">ForkProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">WorkerProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            np.ndarray: the created data.</span>
-<span class="sd">        &quot;&quot;&quot;</span></div></div>
+
+<div class="viewcode-block" id="WorkerSpawnProcess"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.worker.WorkerSpawnProcess.html#concurrentbuffer.worker.WorkerSpawnProcess">[docs]</a><span class="k">class</span> <span class="nc">WorkerSpawnProcess</span><span class="p">(</span><span class="n">WorkerProcess</span><span class="p">,</span> <span class="n">SpawnProcess</span><span class="p">):</span>
+<div class="viewcode-block" id="WorkerSpawnProcess.__init__"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.worker.WorkerSpawnProcess.html#concurrentbuffer.worker.WorkerSpawnProcess.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">SpawnProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">WorkerProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="get_worker_process_class_object"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.worker.get_worker_process_class_object.html#concurrentbuffer.worker.get_worker_process_class_object">[docs]</a><span class="k">def</span> <span class="nf">get_worker_process_class_object</span><span class="p">(</span><span class="n">context</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">ForkContext</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">WorkerForkProcess</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">SpawnContext</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">WorkerSpawnProcess</span></div>
 </pre></div>
 
               </div>

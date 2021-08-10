@@ -1,0 +1,41 @@
+concurrentbuffer.instructor
+===========================
+
+.. automodule:: concurrentbuffer.instructor
+  
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:                                          
+   
+      get_instructor_process_class_object
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                         
+      :template: custom-class-template.rst               
+   
+      Instructor
+      InstructorForkProcess
+      InstructorProcess
+      InstructorSpawnProcess
+   
+   
+
+   
+   
+   
+
+
+

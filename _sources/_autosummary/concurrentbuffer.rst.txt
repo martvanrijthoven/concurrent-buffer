@@ -30,10 +30,12 @@
 
    concurrentbuffer.factory
    concurrentbuffer.info
+   concurrentbuffer.instructor
    concurrentbuffer.iterator
    concurrentbuffer.manager
    concurrentbuffer.memory
-   concurrentbuffer.message
+   concurrentbuffer.process
    concurrentbuffer.state
+   concurrentbuffer.system
    concurrentbuffer.worker
 

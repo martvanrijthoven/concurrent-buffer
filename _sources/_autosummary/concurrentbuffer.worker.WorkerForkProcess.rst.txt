@@ -1,0 +1,44 @@
+concurrentbuffer.worker.WorkerForkProcess
+=========================================
+
+.. currentmodule:: concurrentbuffer.worker
+
+.. autoclass:: WorkerForkProcess
+   :members:                                   
+   :show-inheritance:                           
+   :inherited-members:                          
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~WorkerForkProcess.__init__
+      ~WorkerForkProcess.close
+      ~WorkerForkProcess.is_alive
+      ~WorkerForkProcess.join
+      ~WorkerForkProcess.kill
+      ~WorkerForkProcess.run
+      ~WorkerForkProcess.start
+      ~WorkerForkProcess.terminate
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~WorkerForkProcess.authkey
+      ~WorkerForkProcess.daemon
+      ~WorkerForkProcess.exitcode
+      ~WorkerForkProcess.ident
+      ~WorkerForkProcess.name
+      ~WorkerForkProcess.pid
+      ~WorkerForkProcess.sentinel
+   
+   

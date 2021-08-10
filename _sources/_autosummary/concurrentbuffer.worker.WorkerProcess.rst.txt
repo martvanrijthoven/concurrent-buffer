@@ -17,29 +17,10 @@ concurrentbuffer.worker.WorkerProcess
    .. autosummary::
    
       ~WorkerProcess.__init__
-      ~WorkerProcess.close
-      ~WorkerProcess.create_data
-      ~WorkerProcess.is_alive
-      ~WorkerProcess.join
-      ~WorkerProcess.kill
       ~WorkerProcess.run
-      ~WorkerProcess.start
-      ~WorkerProcess.terminate
    
    
 
    
-   
-   .. rubric:: Attributes
-
-   .. autosummary::
-   
-      ~WorkerProcess.authkey
-      ~WorkerProcess.daemon
-      ~WorkerProcess.exitcode
-      ~WorkerProcess.ident
-      ~WorkerProcess.name
-      ~WorkerProcess.pid
-      ~WorkerProcess.sentinel
    
    

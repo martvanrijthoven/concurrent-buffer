@@ -1,0 +1,33 @@
+concurrentbuffer.system.BufferSystem
+====================================
+
+.. currentmodule:: concurrentbuffer.system
+
+.. autoclass:: BufferSystem
+   :members:                                   
+   :show-inheritance:                           
+   :inherited-members:                          
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BufferSystem.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BufferSystem.context
+      ~BufferSystem.cpus
+      ~BufferSystem.deterministic
+   
+   

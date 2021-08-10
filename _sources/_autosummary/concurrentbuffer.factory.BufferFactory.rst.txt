@@ -1,4 +1,4 @@
-concurrentbuffer.factory.BufferFactory
+﻿concurrentbuffer.factory.BufferFactory
 ======================================
 
 .. currentmodule:: concurrentbuffer.factory
@@ -17,7 +17,7 @@ concurrentbuffer.factory.BufferFactory
    .. autosummary::
    
       ~BufferFactory.__init__
-      ~BufferFactory.stop
+      ~BufferFactory.shutdown
    
    
 
@@ -29,7 +29,7 @@ concurrentbuffer.factory.BufferFactory
    
       ~BufferFactory.buffer_memory
       ~BufferFactory.buffer_state_memory
-      ~BufferFactory.deterministic
+      ~BufferFactory.buffer_system
       ~BufferFactory.receiver
       ~BufferFactory.sender
    

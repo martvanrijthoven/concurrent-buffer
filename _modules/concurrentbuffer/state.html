@@ -151,7 +151,7 @@
 <div class="viewcode-block" id="BufferStateMemory"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.state.BufferStateMemory.html#concurrentbuffer.state.BufferStateMemory">[docs]</a><span class="k">class</span> <span class="nc">BufferStateMemory</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Class that contains the states of buffers&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="BufferStateMemory.__init__"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.state.BufferStateMemory.html#concurrentbuffer.state.BufferStateMemory.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="n">SharedMemory</span><span class="p">):</span>
+<div class="viewcode-block" id="BufferStateMemory.__init__"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.state.BufferStateMemory.html#concurrentbuffer.state.BufferStateMemory.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">lock</span><span class="p">:</span> <span class="n">Lock</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="n">SharedMemory</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init</span>
 
 <span class="sd">        Args:</span>
@@ -159,12 +159,11 @@
 <span class="sd">            dtype (type): type of buffers</span>
 <span class="sd">            buffer (SharedMemory): buffer that contains states</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">=</span> <span class="n">count</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dtype</span> <span class="o">=</span> <span class="n">dtype</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="n">buffer</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">lock</span>
 
         <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_count</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">update_buffer_id_to_free</span><span class="p">(</span><span class="n">buffer_id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span></div>

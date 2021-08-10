@@ -1,0 +1,6 @@
+concurrentbuffer.instructor.get\_instructor\_process\_class\_object
+===================================================================
+
+.. currentmodule:: concurrentbuffer.instructor
+
+.. autofunction:: get_instructor_process_class_object

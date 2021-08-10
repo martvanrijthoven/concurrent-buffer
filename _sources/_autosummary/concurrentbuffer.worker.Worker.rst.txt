@@ -1,0 +1,27 @@
+concurrentbuffer.worker.Worker
+==============================
+
+.. currentmodule:: concurrentbuffer.worker
+
+.. autoclass:: Worker
+   :members:                                   
+   :show-inheritance:                           
+   :inherited-members:                          
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Worker.__init__
+      ~Worker.build
+      ~Worker.create_data
+   
+   
+
+   
+   
+   

@@ -1,0 +1,44 @@
+concurrentbuffer.worker.WorkerSpawnProcess
+==========================================
+
+.. currentmodule:: concurrentbuffer.worker
+
+.. autoclass:: WorkerSpawnProcess
+   :members:                                   
+   :show-inheritance:                           
+   :inherited-members:                          
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~WorkerSpawnProcess.__init__
+      ~WorkerSpawnProcess.close
+      ~WorkerSpawnProcess.is_alive
+      ~WorkerSpawnProcess.join
+      ~WorkerSpawnProcess.kill
+      ~WorkerSpawnProcess.run
+      ~WorkerSpawnProcess.start
+      ~WorkerSpawnProcess.terminate
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~WorkerSpawnProcess.authkey
+      ~WorkerSpawnProcess.daemon
+      ~WorkerSpawnProcess.exitcode
+      ~WorkerSpawnProcess.ident
+      ~WorkerSpawnProcess.name
+      ~WorkerSpawnProcess.pid
+      ~WorkerSpawnProcess.sentinel
+   
+   
