@@ -1,8 +1,9 @@
 from abc import abstractmethod
 from multiprocessing import Queue
 from multiprocessing.connection import Connection
+from multiprocessing.context import ForkContext, ForkProcess, SpawnContext, SpawnProcess
 from typing import Optional
-from multiprocessing.context import SpawnProcess, ForkProcess
+
 from concurrentbuffer.process import SubProcessObject
 from concurrentbuffer.state import BufferStateMemory
 
@@ -75,7 +76,7 @@ class InstructorSpawnProcess(InstructorProcess, SpawnProcess):
 
 
 def get_instructor_process_class_object(context) -> type:
-    if context == "fork":
+    if isinstance(context, ForkContext):
         return InstructorForkProcess
-    elif context == "spawn":
+    if isinstance(context, SpawnContext):
         return InstructorSpawnProcess

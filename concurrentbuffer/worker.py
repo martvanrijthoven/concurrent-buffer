@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from multiprocessing import Queue
-from multiprocessing.context import ForkProcess, SpawnProcess
+from multiprocessing.context import ForkContext, ForkProcess, SpawnContext, SpawnProcess
 
 import numpy as np
 
@@ -73,7 +73,7 @@ class WorkerSpawnProcess(WorkerProcess, SpawnProcess):
 
 
 def get_worker_process_class_object(context) -> type:
-    if context == "fork":
+    if isinstance(context, ForkContext):
         return WorkerForkProcess
-    elif context == "spawn":
+    if isinstance(context, SpawnContext):
         return WorkerSpawnProcess

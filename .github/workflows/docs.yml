@@ -4,18 +4,19 @@ on:
   push:
     branches: [main]
     paths:
+      - "concurrentbuffer/**"
       - "docs/**"
       - .github/workflows/docs.yml
   pull_request:
     branches: [main]
     paths:
+      - "concurrentbuffer/**"
       - "docs/**"
       - .github/workflows/docs.yml
 
 env:
   PYTHON_VERSION: "3.8"
 
-  
 jobs:
   docs:
     runs-on: ubuntu-latest

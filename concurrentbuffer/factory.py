@@ -1,4 +1,4 @@
-import multiprocessing
+from concurrentbuffer.system import BufferSystem
 from typing import List
 
 from concurrentbuffer.info import BufferInfo
@@ -29,12 +29,10 @@ class BufferFactory:
 
     def __init__(
         self,
-        cpus: int,
+        buffer_system: BufferSystem,
         buffer_info: BufferInfo,
         instructor: Instructor,
         worker: Worker,
-        context: str = "spawn",  # TODO make enum
-        deterministic: bool = True,
     ):
         """Initialization
 
@@ -44,22 +42,19 @@ class BufferFactory:
             deterministic (bool, optional): determines if creation/retreiving of data is determinstic. Defaults to True.
         """
 
-        self._cpus = cpus
+        self._buffer_system = buffer_system
         self._buffer_info = buffer_info
         self._instructor = instructor
         self._worker = worker
-        self._deterministic = deterministic
 
-        self._context = multiprocessing.get_context(context)
+        self._InstructorProcessClass = get_instructor_process_class_object(buffer_system.context)
+        self._WorkerProcessClass = get_worker_process_class_object(buffer_system.context)
 
-        self._InstructorProcessClass = get_instructor_process_class_object(context)
-        self._WorkerProcessClass = get_worker_process_class_object(context)
-
-        self._message_queue = self._context.Queue(maxsize=self._buffer_info.count)
+        self._message_queue = self._buffer_system.context.Queue(maxsize=self._buffer_info.count)
         self._receiver, self._sender = (
-            self._context.Pipe() if self._deterministic else (None, None)
+            self._buffer_system.context.Pipe() if self._buffer_system.deterministic else (None, None)
         )
-        self._lock = self._context.Lock()
+        self._lock = self._buffer_system.context.Lock()
 
         self._init_shared_buffer_manager()
         self._init_buffer_state_memory()
@@ -68,8 +63,8 @@ class BufferFactory:
         self._init_worker_processes()
 
     @property
-    def deterministic(self):
-        return self._deterministic
+    def buffer_system(self):
+        return self._buffer_system
 
     @property
     def buffer_state_memory(self):
@@ -115,9 +110,9 @@ class BufferFactory:
         for worker_process in self._worker_processes:
             worker_process.start()
 
-    def stop(self):
+    def shutdown(self):
         # sending stop messages to queues
-        for _ in range(self._cpus):
+        for _ in range(self._buffer_system.cpus):
             self._message_queue.put(STOP_MESSAGE)
 
         # stop worker processes
@@ -130,7 +125,7 @@ class BufferFactory:
         self._message_process.join()
 
         # close connections
-        if self._deterministic:
+        if self._buffer_system.deterministic:
             self._sender.close()
             self._receiver.close()
 
@@ -147,7 +142,7 @@ class BufferFactory:
 
     def _create_worker_processes(self) -> List[WorkerProcess]:
         worker_processes = []
-        for _ in range(self._cpus):
+        for _ in range(self._buffer_system.cpus):
             worker_process = self._WorkerProcessClass(
                 worker=self._worker,
                 buffer_shape=self._buffer_info.shape,

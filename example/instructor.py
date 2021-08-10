@@ -6,9 +6,9 @@ Example Message Process
 """
 
 class DataInstructor(Instructor):
-    def __init__(self):
+    def __init__(self, times):
         self._index = 0
-        self._times = [1, 5, 1, 4, 1, 1, 2, 4, 2, 4]
+        self._times = times
 
 
     def create_message(self):
