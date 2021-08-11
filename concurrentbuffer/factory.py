@@ -1,25 +1,21 @@
-from concurrentbuffer.iterator import BufferIterator
-import multiprocessing
-from concurrentbuffer.system import BufferSystem
 from typing import List
 
-from concurrentbuffer.info import BufferInfo
-from concurrentbuffer.state import BufferState
-from concurrentbuffer.manager import SharedBufferManager
-from concurrentbuffer.memory import BufferMemory
 from concurrentbuffer.commander import (
     STOP_MESSAGE,
     Commander,
     CommanderProcess,
     get_commander_process_class_object,
 )
-from concurrentbuffer.state import BufferStateMemory
+from concurrentbuffer.info import BufferInfo
+from concurrentbuffer.manager import SharedBufferManager
+from concurrentbuffer.memory import BufferMemory
 from concurrentbuffer.producer import (
     Producer,
     ProducerProcess,
     get_producer_process_class_object,
 )
-
+from concurrentbuffer.state import BufferStateMemory
+from concurrentbuffer.system import BufferSystem
 
 # use spawn with pickable object
 # use spawn with build function
@@ -163,5 +159,3 @@ class BufferFactory:
             )
             producer_processes.append(producer_process)
         return producer_processes
-
-
