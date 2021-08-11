@@ -15,9 +15,8 @@ A commander process controls the produced data via user-defined dictionary messa
 
 ```python
 
-from multiprocessing.context import BaseContext, ForkContext, SpawnContext
+from multiprocessing.context import ForkContext, SpawnContext
 
-import numpy as np
 from concurrentbuffer.factory import BufferFactory
 from concurrentbuffer.info import BufferInfo
 from concurrentbuffer.iterator import BufferIterator
