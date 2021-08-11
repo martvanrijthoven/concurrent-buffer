@@ -3,6 +3,51 @@ Concurrent Buffer Example
 
 #### Example Usage
 
+##### easy usage:
+
+.. code-block:: python
+    from concurrentbuffer.iterator import buffer_iterator_factory
+
+    # the number of cpus/producers
+    cpus = 8
+
+    # the buffershape in the shared memory
+    buffer_shape = (64, 256, 256, 3)
+    
+    # the context of multiprocess (spawn or fork)
+    context = 'spawn'
+
+    # if the messages from the commander and the produced data are first in first out
+    deterministic = True
+
+    # You will have to create your own Commander class, please see instructions below
+    # a user defined commander, should subclass the Commander class
+    commander = IndexCommander(max_index=10)
+
+    # You will have to create your own Producer class, please see instructions below
+    # a user defined producer, should subclass the Producer class
+    producer = DataProducer(data_shape=BUFFER_SHAPE)
+
+    # create a buffer iterator
+    buffer_iterator = buffer_iterator_factory(
+        cpus=cpus,
+        buffer_shape=buffer_shape,
+        commander=commander,
+        producer=producer,
+        context=context,
+        deterministic=deterministic,
+    )
+
+    # loop through the buffer that is filled concurrently at the same time
+    for index in range(10):
+        data = next(buffer_iterator)
+        
+    # always stop the iterator to close all processes and free the shared memory
+    buffer_iterator.stop()
+
+
+##### advanced usage:
+
 .. code-block:: python
 
     from multiprocessing.context import ForkContext, SpawnContext
