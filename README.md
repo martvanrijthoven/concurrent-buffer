@@ -50,11 +50,11 @@ buffer_info = BufferInfo(count=count, shape=BUFFER_SHAPE)
 
 # You will have to create your own Commander class, please see instructions below
 # a user defined commander, should subclass the Commander class
-commander = UserDefinedCommander()
+commander = IndexCommander(max_index=10)
 
 # You will have to create your own Producer class, please see instructions below
 # a user defined producer, should subclass the Producer class
-producer = UserDefinedProducer()
+producer = DataProducer(data_shape=BUFFER_SHAPE)
 
 # a factor class that builds the buffer components
 buffer_factory = BufferFactory(
