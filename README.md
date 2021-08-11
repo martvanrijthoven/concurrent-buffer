@@ -24,6 +24,10 @@ pip install concurrentbuffer
 
 ## Example usage:
 
+Important note: 
+ - 'spawn' multiprocessing context will not work in a jupyter notebook/lab, use fork instead when working in a jupyter notebook / jupyter lab
+
+
 ###### Easy Usage:
 
 ```python     
