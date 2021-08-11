@@ -137,6 +137,91 @@
                 
   <div class="section" id="concurrent-buffer-example">
 <h1>Concurrent Buffer Example<a class="headerlink" href="#concurrent-buffer-example" title="Permalink to this headline">¶</a></h1>
+<p>#### Example Usage</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">multiprocessing.context</span> <span class="kn">import</span> <span class="n">ForkContext</span><span class="p">,</span> <span class="n">SpawnContext</span>
+
+<span class="kn">from</span> <span class="nn">concurrentbuffer.factory</span> <span class="kn">import</span> <span class="n">BufferFactory</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.info</span> <span class="kn">import</span> <span class="n">BufferInfo</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.iterator</span> <span class="kn">import</span> <span class="n">BufferIterator</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.state</span> <span class="kn">import</span> <span class="n">BufferState</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.system</span> <span class="kn">import</span> <span class="n">BufferSystem</span>
+
+
+<span class="c1"># the number of cpus/producers</span>
+<span class="n">CPUS</span> <span class="o">=</span> <span class="mi">8</span>
+
+<span class="c1"># the buffershape in the shared memory</span>
+<span class="n">BUFFER_SHAPE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># the context of multiprocess (spawn or fork)</span>
+<span class="n">CONTEXT</span> <span class="o">=</span> <span class="n">SpawnContext</span><span class="p">()</span>
+
+<span class="c1"># if the messages from the commander and the produced data are first in first out</span>
+<span class="n">DETERMINISTIC</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="c1"># the number of buffers each with shape of BUFFERSHAPE</span>
+<span class="n">count</span> <span class="o">=</span> <span class="n">CPUS</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">BufferState</span><span class="p">)</span>
+
+<span class="c1"># buffer system contains the information of the system</span>
+<span class="n">buffer_system</span> <span class="o">=</span> <span class="n">BufferSystem</span><span class="p">(</span>
+    <span class="n">cpus</span><span class="o">=</span><span class="n">CPUS</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">CONTEXT</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="n">DETERMINISTIC</span>
+<span class="p">)</span>
+
+<span class="c1"># buffer info contains the information of the buffers</span>
+<span class="n">buffer_info</span> <span class="o">=</span> <span class="n">BufferInfo</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">count</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">BUFFER_SHAPE</span><span class="p">)</span>
+
+<span class="c1"># You will have to create your own Commander class, please see instructions below</span>
+<span class="c1"># a user defined commander, should subclass the Commander class</span>
+<span class="n">commander</span> <span class="o">=</span> <span class="n">IndexCommander</span><span class="p">(</span><span class="n">max_index</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># You will have to create your own Producer class, please see instructions below</span>
+<span class="c1"># a user defined producer, should subclass the Producer class</span>
+<span class="n">producer</span> <span class="o">=</span> <span class="n">DataProducer</span><span class="p">(</span><span class="n">data_shape</span><span class="o">=</span><span class="n">BUFFER_SHAPE</span><span class="p">)</span>
+
+<span class="c1"># a factor class that builds the buffer components</span>
+<span class="n">buffer_factory</span> <span class="o">=</span> <span class="n">BufferFactory</span><span class="p">(</span>
+    <span class="n">buffer_system</span><span class="o">=</span><span class="n">buffer_system</span><span class="p">,</span>
+    <span class="n">buffer_info</span><span class="o">=</span><span class="n">buffer_info</span><span class="p">,</span>
+    <span class="n">commander</span><span class="o">=</span><span class="n">commander</span><span class="p">,</span>
+    <span class="n">producer</span><span class="o">=</span><span class="n">producer</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># a buffer iterator created with the buffer factory that allows iterating throught the &#39;concurrent&#39; buffer.</span>
+<span class="k">with</span> <span class="n">BufferIterator</span><span class="p">(</span><span class="n">buffer_factory</span><span class="o">=</span><span class="n">buffer_factory</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_buffer_iterator</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">data_buffer_iterator</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>##### Creating a Commander</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">concurrentbuffer.commander</span> <span class="kn">import</span> <span class="n">Commander</span>
+<span class="k">class</span> <span class="nc">IndexCommander</span><span class="p">(</span><span class="n">Commander</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_index</span> <span class="o">=</span> <span class="n">max_index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">create_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">index</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_index</span>
+        <span class="k">return</span> <span class="n">message</span>
+</pre></div>
+</div>
+<p>##### Creating a Producer</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.producer</span> <span class="kn">import</span> <span class="n">Producer</span>
+
+<span class="k">class</span> <span class="nc">DataProducer</span><span class="p">(</span><span class="n">Producer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_shape</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data_shape</span> <span class="o">=</span> <span class="n">data_shape</span>
+
+    <span class="k">def</span> <span class="nf">create_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_consuming_processing</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_time_consuming_processing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="o">...</span>
+        <span class="c1">#TODO use index and self._data_shape to create and process a numpy array</span>
+</pre></div>
+</div>
 </div>
 
 
