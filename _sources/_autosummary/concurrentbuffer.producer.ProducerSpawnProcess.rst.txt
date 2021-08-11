@@ -1,0 +1,44 @@
+concurrentbuffer.producer.ProducerSpawnProcess
+==============================================
+
+.. currentmodule:: concurrentbuffer.producer
+
+.. autoclass:: ProducerSpawnProcess
+   :members:                                   
+   :show-inheritance:                           
+   :inherited-members:                          
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ProducerSpawnProcess.__init__
+      ~ProducerSpawnProcess.close
+      ~ProducerSpawnProcess.is_alive
+      ~ProducerSpawnProcess.join
+      ~ProducerSpawnProcess.kill
+      ~ProducerSpawnProcess.run
+      ~ProducerSpawnProcess.start
+      ~ProducerSpawnProcess.terminate
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ProducerSpawnProcess.authkey
+      ~ProducerSpawnProcess.daemon
+      ~ProducerSpawnProcess.exitcode
+      ~ProducerSpawnProcess.ident
+      ~ProducerSpawnProcess.name
+      ~ProducerSpawnProcess.pid
+      ~ProducerSpawnProcess.sentinel
+   
+   
