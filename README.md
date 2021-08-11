@@ -103,3 +103,5 @@ class DataProducer(Producer):
         ...
         #TODO use index and self._data_shape to create and process a numpy array
 ```
+
+For more information please see the [docs](https://martvanrijthoven.github.io/concurrent-buffer/). Feel free to open issue if you have anny questions or remarks.
