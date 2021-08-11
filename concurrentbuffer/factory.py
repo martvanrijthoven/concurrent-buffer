@@ -11,10 +11,10 @@ from concurrentbuffer.instructor import (
     get_instructor_process_class_object,
 )
 from concurrentbuffer.state import BufferStateMemory
-from concurrentbuffer.worker import (
-    Worker,
-    WorkerProcess,
-    get_worker_process_class_object,
+from concurrentbuffer.producer import (
+    Producer,
+    ProducerProcess,
+    get_producer_process_class_object,
 )
 
 
@@ -32,12 +32,12 @@ class BufferFactory:
         buffer_system: BufferSystem,
         buffer_info: BufferInfo,
         instructor: Instructor,
-        worker: Worker,
+        producer: Producer,
     ):
         """Initialization
 
         Args:
-            cpus (int): number of cpus used for the worker processes
+            cpus (int): number of cpus used for the producer processes
             buffer_info (BufferInfo): info about count, shape and type of the buffers
             deterministic (bool, optional): determines if creation/retreiving of data is determinstic. Defaults to True.
         """
@@ -45,10 +45,10 @@ class BufferFactory:
         self._buffer_system = buffer_system
         self._buffer_info = buffer_info
         self._instructor = instructor
-        self._worker = worker
+        self._producer = producer
 
         self._InstructorProcessClass = get_instructor_process_class_object(buffer_system.context)
-        self._WorkerProcessClass = get_worker_process_class_object(buffer_system.context)
+        self._ProducerProcessClass = get_producer_process_class_object(buffer_system.context)
 
         self._message_queue = self._buffer_system.context.Queue(maxsize=self._buffer_info.count)
         self._receiver, self._sender = (
@@ -60,7 +60,7 @@ class BufferFactory:
         self._init_buffer_state_memory()
         self._init_buffer_memory()
         self._init_message_process()
-        self._init_worker_processes()
+        self._init_producer_processes()
 
     @property
     def buffer_system(self):
@@ -105,20 +105,20 @@ class BufferFactory:
         self._message_process = self._create_instructor_process()
         self._message_process.start()
 
-    def _init_worker_processes(self):
-        self._worker_processes = self._create_worker_processes()
-        for worker_process in self._worker_processes:
-            worker_process.start()
+    def _init_producer_processes(self):
+        self._producer_processes = self._create_producer_processes()
+        for producer_process in self._producer_processes:
+            producer_process.start()
 
     def shutdown(self):
         # sending stop messages to queues
         for _ in range(self._buffer_system.cpus):
             self._message_queue.put(STOP_MESSAGE)
 
-        # stop worker processes
-        for worker_process in self._worker_processes:
-            worker_process.terminate()
-            worker_process.join()
+        # stop producer processes
+        for producer_process in self._producer_processes:
+            producer_process.terminate()
+            producer_process.join()
 
         # stop message process
         self._message_process.terminate()
@@ -140,15 +140,15 @@ class BufferFactory:
             buffer_id_sender=self.sender,
         )
 
-    def _create_worker_processes(self) -> List[WorkerProcess]:
-        worker_processes = []
+    def _create_producer_processes(self) -> List[ProducerProcess]:
+        producer_processes = []
         for _ in range(self._buffer_system.cpus):
-            worker_process = self._WorkerProcessClass(
-                worker=self._worker,
+            producer_process = self._ProducerProcessClass(
+                producer=self._producer,
                 buffer_shape=self._buffer_info.shape,
                 buffer_state_memory=self._buffer_state_memory,
                 buffer_memory=self._buffer_memory,
                 message_queue=self._message_queue,
             )
-            worker_processes.append(worker_process)
-        return worker_processes
+            producer_processes.append(producer_process)
+        return producer_processes

@@ -7,7 +7,7 @@ from concurrentbuffer.iterator import BufferIterator
 from concurrentbuffer.state import BufferState
 from concurrentbuffer.system import BufferSystem
 from example.instructor import DataInstructor
-from example.worker import DataWorker
+from example.producer import DataProducer
 
 CPUS = 6
 BUFFER_SHAPE = (12, 284, 284, 3)
@@ -27,7 +27,7 @@ class TestBufferIterator:
         buffer_info = BufferInfo(count=count, shape=BUFFER_SHAPE)
 
         instructor = DataInstructor(times=TIMES)
-        worker = DataWorker(data_shape=BUFFER_SHAPE)
+        worker = DataProducer(data_shape=BUFFER_SHAPE)
 
         buffer_factory = BufferFactory(
             buffer_system=buffer_system,

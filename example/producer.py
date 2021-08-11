@@ -1,14 +1,14 @@
 import time
 
 import numpy as np
-from concurrentbuffer.worker import Worker
+from concurrentbuffer.producer import Producer
 
 """
 Example Worker Process
 """
 
 
-class DataWorker(Worker):
+class DataProducer(Producer):
     def __init__(self, data_shape):
         self._data_shape = data_shape
 
