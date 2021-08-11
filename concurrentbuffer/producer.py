@@ -4,7 +4,7 @@ from multiprocessing.context import ForkContext, ForkProcess, SpawnContext, Spaw
 
 import numpy as np
 
-from concurrentbuffer.instructor import BUFFER_ID_KEY, STOP_MESSAGE
+from concurrentbuffer.commander import BUFFER_ID_KEY, STOP_MESSAGE
 from concurrentbuffer.memory import BufferMemory
 from concurrentbuffer.process import SubProcessObject
 from concurrentbuffer.state import BufferStateMemory
