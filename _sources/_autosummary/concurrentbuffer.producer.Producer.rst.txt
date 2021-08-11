@@ -1,0 +1,27 @@
+concurrentbuffer.producer.Producer
+==================================
+
+.. currentmodule:: concurrentbuffer.producer
+
+.. autoclass:: Producer
+   :members:                                   
+   :show-inheritance:                           
+   :inherited-members:                          
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Producer.__init__
+      ~Producer.build
+      ~Producer.create_data
+   
+   
+
+   
+   
+   

@@ -1,6 +1,0 @@
-concurrentbuffer.worker.get\_worker\_process\_class\_object
-===========================================================
-
-.. currentmodule:: concurrentbuffer.worker
-
-.. autofunction:: get_worker_process_class_object

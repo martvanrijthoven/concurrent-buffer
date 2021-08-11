@@ -135,10 +135,10 @@
     <span class="n">get_instructor_process_class_object</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">concurrentbuffer.state</span> <span class="kn">import</span> <span class="n">BufferStateMemory</span>
-<span class="kn">from</span> <span class="nn">concurrentbuffer.worker</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">Worker</span><span class="p">,</span>
-    <span class="n">WorkerProcess</span><span class="p">,</span>
-    <span class="n">get_worker_process_class_object</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.producer</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Producer</span><span class="p">,</span>
+    <span class="n">ProducerProcess</span><span class="p">,</span>
+    <span class="n">get_producer_process_class_object</span><span class="p">,</span>
 <span class="p">)</span>
 
 
@@ -156,12 +156,12 @@
         <span class="n">buffer_system</span><span class="p">:</span> <span class="n">BufferSystem</span><span class="p">,</span>
         <span class="n">buffer_info</span><span class="p">:</span> <span class="n">BufferInfo</span><span class="p">,</span>
         <span class="n">instructor</span><span class="p">:</span> <span class="n">Instructor</span><span class="p">,</span>
-        <span class="n">worker</span><span class="p">:</span> <span class="n">Worker</span><span class="p">,</span>
+        <span class="n">producer</span><span class="p">:</span> <span class="n">Producer</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialization</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            cpus (int): number of cpus used for the worker processes</span>
+<span class="sd">            cpus (int): number of cpus used for the producer processes</span>
 <span class="sd">            buffer_info (BufferInfo): info about count, shape and type of the buffers</span>
 <span class="sd">            deterministic (bool, optional): determines if creation/retreiving of data is determinstic. Defaults to True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -169,10 +169,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_system</span> <span class="o">=</span> <span class="n">buffer_system</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span> <span class="o">=</span> <span class="n">buffer_info</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_instructor</span> <span class="o">=</span> <span class="n">instructor</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_worker</span> <span class="o">=</span> <span class="n">worker</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_producer</span> <span class="o">=</span> <span class="n">producer</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_InstructorProcessClass</span> <span class="o">=</span> <span class="n">get_instructor_process_class_object</span><span class="p">(</span><span class="n">buffer_system</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_WorkerProcessClass</span> <span class="o">=</span> <span class="n">get_worker_process_class_object</span><span class="p">(</span><span class="n">buffer_system</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ProducerProcessClass</span> <span class="o">=</span> <span class="n">get_producer_process_class_object</span><span class="p">(</span><span class="n">buffer_system</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_message_queue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_system</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">Queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_receiver</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sender</span> <span class="o">=</span> <span class="p">(</span>
@@ -184,7 +184,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_buffer_state_memory</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_buffer_memory</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_message_process</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_init_worker_processes</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_producer_processes</span><span class="p">()</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">buffer_system</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -229,20 +229,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_message_process</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_instructor_process</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_message_process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">_init_worker_processes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_worker_processes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_worker_processes</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">worker_process</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_worker_processes</span><span class="p">:</span>
-            <span class="n">worker_process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_init_producer_processes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_producer_processes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_producer_processes</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">producer_process</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_producer_processes</span><span class="p">:</span>
+            <span class="n">producer_process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># sending stop messages to queues</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_system</span><span class="o">.</span><span class="n">cpus</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_message_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">STOP_MESSAGE</span><span class="p">)</span>
 
-        <span class="c1"># stop worker processes</span>
-        <span class="k">for</span> <span class="n">worker_process</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_worker_processes</span><span class="p">:</span>
-            <span class="n">worker_process</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
-            <span class="n">worker_process</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="c1"># stop producer processes</span>
+        <span class="k">for</span> <span class="n">producer_process</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_producer_processes</span><span class="p">:</span>
+            <span class="n">producer_process</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+            <span class="n">producer_process</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
 
         <span class="c1"># stop message process</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_message_process</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
@@ -264,18 +264,18 @@
             <span class="n">buffer_id_sender</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_create_worker_processes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">WorkerProcess</span><span class="p">]:</span>
-        <span class="n">worker_processes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">def</span> <span class="nf">_create_producer_processes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ProducerProcess</span><span class="p">]:</span>
+        <span class="n">producer_processes</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_system</span><span class="o">.</span><span class="n">cpus</span><span class="p">):</span>
-            <span class="n">worker_process</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_WorkerProcessClass</span><span class="p">(</span>
-                <span class="n">worker</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_worker</span><span class="p">,</span>
+            <span class="n">producer_process</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ProducerProcessClass</span><span class="p">(</span>
+                <span class="n">producer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_producer</span><span class="p">,</span>
                 <span class="n">buffer_shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
                 <span class="n">buffer_state_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_state_memory</span><span class="p">,</span>
                 <span class="n">buffer_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_memory</span><span class="p">,</span>
                 <span class="n">message_queue</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_message_queue</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">worker_processes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">worker_process</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">worker_processes</span></div>
+            <span class="n">producer_processes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">producer_process</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">producer_processes</span></div>
 </pre></div>
 
               </div>

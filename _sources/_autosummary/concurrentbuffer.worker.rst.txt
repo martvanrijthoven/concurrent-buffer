@@ -9,13 +9,6 @@ concurrentbuffer.worker
 
    
    
-   .. rubric:: Functions
-
-   .. autosummary::
-      :toctree:                                          
-   
-      get_worker_process_class_object
-   
    
 
    
@@ -26,10 +19,7 @@ concurrentbuffer.worker
       :toctree:                                         
       :template: custom-class-template.rst               
    
-      Worker
-      WorkerForkProcess
       WorkerProcess
-      WorkerSpawnProcess
    
    
 

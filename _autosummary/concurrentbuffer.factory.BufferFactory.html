@@ -246,11 +246,48 @@
   </ul>
  </li>
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="concurrentbuffer.state.html">
-   concurrentbuffer.state
+  <a class="reference internal" href="concurrentbuffer.producer.html">
+   concurrentbuffer.producer
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
   <label for="toctree-checkbox-8">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="concurrentbuffer.producer.get_producer_process_class_object.html">
+     concurrentbuffer.producer.get_producer_process_class_object
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="concurrentbuffer.producer.Producer.html">
+     concurrentbuffer.producer.Producer
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="concurrentbuffer.producer.ProducerForkProcess.html">
+     concurrentbuffer.producer.ProducerForkProcess
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="concurrentbuffer.producer.ProducerProcess.html">
+     concurrentbuffer.producer.ProducerProcess
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="concurrentbuffer.producer.ProducerSpawnProcess.html">
+     concurrentbuffer.producer.ProducerSpawnProcess
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="concurrentbuffer.state.html">
+   concurrentbuffer.state
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -271,23 +308,6 @@
   <a class="reference internal" href="concurrentbuffer.system.html">
    concurrentbuffer.system
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
-  <label for="toctree-checkbox-9">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="concurrentbuffer.system.BufferSystem.html">
-     concurrentbuffer.system.BufferSystem
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="concurrentbuffer.worker.html">
-   concurrentbuffer.worker
-  </a>
   <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
   <label for="toctree-checkbox-10">
    <i class="fas fa-chevron-down">
@@ -295,28 +315,8 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="concurrentbuffer.worker.get_worker_process_class_object.html">
-     concurrentbuffer.worker.get_worker_process_class_object
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="concurrentbuffer.worker.Worker.html">
-     concurrentbuffer.worker.Worker
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="concurrentbuffer.worker.WorkerForkProcess.html">
-     concurrentbuffer.worker.WorkerForkProcess
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="concurrentbuffer.worker.WorkerProcess.html">
-     concurrentbuffer.worker.WorkerProcess
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="concurrentbuffer.worker.WorkerSpawnProcess.html">
-     concurrentbuffer.worker.WorkerSpawnProcess
+    <a class="reference internal" href="concurrentbuffer.system.BufferSystem.html">
+     concurrentbuffer.system.BufferSystem
     </a>
    </li>
   </ul>
@@ -361,22 +361,22 @@
 <h1>concurrentbuffer.factory.BufferFactory<a class="headerlink" href="#concurrentbuffer-factory-bufferfactory" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="concurrentbuffer.factory.BufferFactory">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">BufferFactory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer_system</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instructor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worker</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/concurrentbuffer/factory.html#BufferFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#concurrentbuffer.factory.BufferFactory" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">BufferFactory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer_system</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instructor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">producer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/concurrentbuffer/factory.html#BufferFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#concurrentbuffer.factory.BufferFactory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Factory that builds all the components</p>
 <p>Initialization</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>cpus (int): number of cpus used for the worker processes
+<dt>Args:</dt><dd><p>cpus (int): number of cpus used for the producer processes
 buffer_info (BufferInfo): info about count, shape and type of the buffers
 deterministic (bool, optional): determines if creation/retreiving of data is determinstic. Defaults to True.</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="concurrentbuffer.factory.BufferFactory.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer_system</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instructor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worker</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/concurrentbuffer/factory.html#BufferFactory.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#concurrentbuffer.factory.BufferFactory.__init__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer_system</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instructor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">producer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/concurrentbuffer/factory.html#BufferFactory.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#concurrentbuffer.factory.BufferFactory.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialization</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>cpus (int): number of cpus used for the worker processes
+<dt>Args:</dt><dd><p>cpus (int): number of cpus used for the producer processes
 buffer_info (BufferInfo): info about count, shape and type of the buffers
 deterministic (bool, optional): determines if creation/retreiving of data is determinstic. Defaults to True.</p>
 </dd>

@@ -1,9 +1,9 @@
-concurrentbuffer.worker.Worker
-==============================
+concurrentbuffer.producer.ProducerProcess
+=========================================
 
-.. currentmodule:: concurrentbuffer.worker
+.. currentmodule:: concurrentbuffer.producer
 
-.. autoclass:: Worker
+.. autoclass:: ProducerProcess
    :members:                                   
    :show-inheritance:                           
    :inherited-members:                          
@@ -16,9 +16,8 @@ concurrentbuffer.worker.Worker
 
    .. autosummary::
    
-      ~Worker.__init__
-      ~Worker.build
-      ~Worker.create_data
+      ~ProducerProcess.__init__
+      ~ProducerProcess.run
    
    
 

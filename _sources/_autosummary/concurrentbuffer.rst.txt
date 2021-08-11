@@ -35,7 +35,7 @@
    concurrentbuffer.manager
    concurrentbuffer.memory
    concurrentbuffer.process
+   concurrentbuffer.producer
    concurrentbuffer.state
    concurrentbuffer.system
-   concurrentbuffer.worker
 

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>concurrentbuffer.info.BufferInfo &#8212; concurrent-buffer 0.0.1 documentation</title>
+    <title>concurrentbuffer.producer.ProducerProcess &#8212; concurrent-buffer 0.0.1 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet" />
   <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -118,18 +118,18 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1 current active has-children">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="concurrentbuffer.info.html">
    concurrentbuffer.info
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
   <label for="toctree-checkbox-2">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul class="current">
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="concurrentbuffer.info.BufferInfo.html">
      concurrentbuffer.info.BufferInfo
     </a>
    </li>
@@ -245,16 +245,16 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1 has-children">
+ <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="concurrentbuffer.producer.html">
    concurrentbuffer.producer
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
   <label for="toctree-checkbox-8">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul>
+  <ul class="current">
    <li class="toctree-l2">
     <a class="reference internal" href="concurrentbuffer.producer.get_producer_process_class_object.html">
      concurrentbuffer.producer.get_producer_process_class_object
@@ -270,8 +270,8 @@
      concurrentbuffer.producer.ProducerForkProcess
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="concurrentbuffer.producer.ProducerProcess.html">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      concurrentbuffer.producer.ProducerProcess
     </a>
    </li>
@@ -357,28 +357,30 @@
               
               <div>
                 
-  <div class="section" id="concurrentbuffer-info-bufferinfo">
-<h1>concurrentbuffer.info.BufferInfo<a class="headerlink" href="#concurrentbuffer-info-bufferinfo" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="concurrentbuffer-producer-producerprocess">
+<h1>concurrentbuffer.producer.ProducerProcess<a class="headerlink" href="#concurrentbuffer-producer-producerprocess" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="concurrentbuffer.info.BufferInfo">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">BufferInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">dtype('uint8')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/concurrentbuffer/info.html#BufferInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#concurrentbuffer.info.BufferInfo" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="concurrentbuffer.producer.ProducerProcess">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ProducerProcess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">producer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_state_memory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_memory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_queue</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/concurrentbuffer/producer.html#ProducerProcess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#concurrentbuffer.producer.ProducerProcess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Class that contains information about the count, shape and type of the buffers</p>
-<p>Init</p>
+<p>Process that creates data and puts in into a shared memory buffer.</p>
+<p>Initialization</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>count (int): count of buffers
-shape (tuple): shape of a single buffer
-dtype (np.dtype, optional): type of the data in the buffers. Defaults to np.dtype(“uint8”).</p>
+<dt>Args:</dt><dd><p>buffer_shape (tuple): shape of the data in the buffers, needs to be used when creating new data
+buffer_state_memory (BufferStateMemory): buffer that contains the states of the buffer memory
+buffer_memory (BufferMemory): contains the buffers
+message_queue (Queue): queue that receives messages from a MessageProcess that can be used to construct data</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="concurrentbuffer.info.BufferInfo.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">dtype('uint8')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/concurrentbuffer/info.html#BufferInfo.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#concurrentbuffer.info.BufferInfo.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Init</p>
+<dt class="sig sig-object py" id="concurrentbuffer.producer.ProducerProcess.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">producer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_state_memory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_memory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_queue</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/concurrentbuffer/producer.html#ProducerProcess.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#concurrentbuffer.producer.ProducerProcess.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialization</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>count (int): count of buffers
-shape (tuple): shape of a single buffer
-dtype (np.dtype, optional): type of the data in the buffers. Defaults to np.dtype(“uint8”).</p>
+<dt>Args:</dt><dd><p>buffer_shape (tuple): shape of the data in the buffers, needs to be used when creating new data
+buffer_state_memory (BufferStateMemory): buffer that contains the states of the buffer memory
+buffer_memory (BufferMemory): contains the buffers
+message_queue (Queue): queue that receives messages from a MessageProcess that can be used to construct data</p>
 </dd>
 </dl>
 </dd></dl>
@@ -390,41 +392,11 @@ dtype (np.dtype, optional): type of the data in the buffers. Defaults to np.dtyp
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#concurrentbuffer.info.BufferInfo.__init__" title="concurrentbuffer.info.BufferInfo.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(count, shape[, dtype])</p></td>
-<td><p>Init</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#concurrentbuffer.producer.ProducerProcess.__init__" title="concurrentbuffer.producer.ProducerProcess.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(producer, buffer_shape, …)</p></td>
+<td><p>Initialization</p></td>
 </tr>
-</tbody>
-</table>
-<p class="rubric">Attributes</p>
-<table class="longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">count</span></code></p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">rtype</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-</dl>
-</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtype</span></code></p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">rtype</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dtype</span></code></p>
-</dd>
-</dl>
-</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape</span></code></p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">rtype</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
-</dd>
-</dl>
-</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code>()</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
