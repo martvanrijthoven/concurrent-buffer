@@ -138,8 +138,48 @@
   <div class="section" id="concurrent-buffer-example">
 <h1>Concurrent Buffer Example<a class="headerlink" href="#concurrent-buffer-example" title="Permalink to this headline">¶</a></h1>
 <p>#### Example Usage</p>
-<p>##### easy usage:</p>
-<p>##### advanced usage:</p>
+<p>##### easy usage</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">concurrentbuffer.iterator</span> <span class="kn">import</span> <span class="n">buffer_iterator_factory</span>
+
+<span class="c1"># the number of cpus/producers</span>
+<span class="n">cpus</span> <span class="o">=</span> <span class="mi">8</span>
+
+<span class="c1"># the buffershape in the shared memory</span>
+<span class="n">buffer_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># the context of multiprocess (spawn or fork)</span>
+<span class="n">context</span> <span class="o">=</span> <span class="s1">&#39;spawn&#39;</span>
+
+<span class="c1"># if the messages from the commander and the produced data are first in first out</span>
+<span class="n">deterministic</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="c1"># You will have to create your own Commander class, please see instructions below</span>
+<span class="c1"># a user defined commander, should subclass the Commander class</span>
+<span class="n">commander</span> <span class="o">=</span> <span class="n">IndexCommander</span><span class="p">(</span><span class="n">max_index</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># You will have to create your own Producer class, please see instructions below</span>
+<span class="c1"># a user defined producer, should subclass the Producer class</span>
+<span class="n">producer</span> <span class="o">=</span> <span class="n">DataProducer</span><span class="p">(</span><span class="n">data_shape</span><span class="o">=</span><span class="n">BUFFER_SHAPE</span><span class="p">)</span>
+
+<span class="c1"># create a buffer iterator</span>
+<span class="n">buffer_iterator</span> <span class="o">=</span> <span class="n">buffer_iterator_factory</span><span class="p">(</span>
+    <span class="n">cpus</span><span class="o">=</span><span class="n">cpus</span><span class="p">,</span>
+    <span class="n">buffer_shape</span><span class="o">=</span><span class="n">buffer_shape</span><span class="p">,</span>
+    <span class="n">commander</span><span class="o">=</span><span class="n">commander</span><span class="p">,</span>
+    <span class="n">producer</span><span class="o">=</span><span class="n">producer</span><span class="p">,</span>
+    <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+    <span class="n">deterministic</span><span class="o">=</span><span class="n">deterministic</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># loop through the buffer that is filled concurrently at the same time</span>
+<span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">buffer_iterator</span><span class="p">)</span>
+
+<span class="c1"># always stop the iterator to close all processes and free the shared memory</span>
+<span class="n">buffer_iterator</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>##### advanced usage</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">multiprocessing.context</span> <span class="kn">import</span> <span class="n">ForkContext</span><span class="p">,</span> <span class="n">SpawnContext</span>
 
 <span class="kn">from</span> <span class="nn">concurrentbuffer.factory</span> <span class="kn">import</span> <span class="n">BufferFactory</span>

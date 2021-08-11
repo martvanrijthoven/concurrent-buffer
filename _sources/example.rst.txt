@@ -3,9 +3,10 @@ Concurrent Buffer Example
 
 #### Example Usage
 
-##### easy usage:
+##### easy usage
 
 .. code-block:: python
+
     from concurrentbuffer.iterator import buffer_iterator_factory
 
     # the number of cpus/producers
@@ -46,7 +47,7 @@ Concurrent Buffer Example
     buffer_iterator.stop()
 
 
-##### advanced usage:
+##### advanced usage
 
 .. code-block:: python
 
