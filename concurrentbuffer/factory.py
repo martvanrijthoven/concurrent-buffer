@@ -1,7 +1,10 @@
+from concurrentbuffer.iterator import BufferIterator
+import multiprocessing
 from concurrentbuffer.system import BufferSystem
 from typing import List
 
 from concurrentbuffer.info import BufferInfo
+from concurrentbuffer.state import BufferState
 from concurrentbuffer.manager import SharedBufferManager
 from concurrentbuffer.memory import BufferMemory
 from concurrentbuffer.commander import (
@@ -20,7 +23,7 @@ from concurrentbuffer.producer import (
 
 # use spawn with pickable object
 # use spawn with build function
-# use fork 
+# use fork
 # use fork with build function
 
 
@@ -47,12 +50,20 @@ class BufferFactory:
         self._commander = commander
         self._producer = producer
 
-        self._CommanderProcessClass = get_commander_process_class_object(buffer_system.context)
-        self._ProducerProcessClass = get_producer_process_class_object(buffer_system.context)
+        self._CommanderProcessClass = get_commander_process_class_object(
+            buffer_system.context
+        )
+        self._ProducerProcessClass = get_producer_process_class_object(
+            buffer_system.context
+        )
 
-        self._message_queue = self._buffer_system.context.Queue(maxsize=self._buffer_info.count)
+        self._message_queue = self._buffer_system.context.Queue(
+            maxsize=self._buffer_info.count
+        )
         self._receiver, self._sender = (
-            self._buffer_system.context.Pipe() if self._buffer_system.deterministic else (None, None)
+            self._buffer_system.context.Pipe()
+            if self._buffer_system.deterministic
+            else (None, None)
         )
         self._lock = self._buffer_system.context.Lock()
 
@@ -152,3 +163,30 @@ class BufferFactory:
             )
             producer_processes.append(producer_process)
         return producer_processes
+
+
+def buffer_iterator_factory(
+    cpus: int,
+    buffer_shape: tuple,
+    commander: Commander,
+    producer: Producer,
+    context: str,
+    deterministic: bool,
+):
+    count = cpus * len(BufferState)
+
+    mp_context = multiprocessing.get_context(context)
+    buffer_system = BufferSystem(
+        cpus=cpus, context=mp_context, deterministic=deterministic
+    )
+
+    buffer_info = BufferInfo(count=count, shape=buffer_shape)
+
+    buffer_factory = BufferFactory(
+        buffer_system=buffer_system,
+        buffer_info=buffer_info,
+        commander=commander,
+        producer=producer,
+    )
+
+    return BufferIterator(buffer_factory=buffer_factory)

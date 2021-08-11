@@ -64,3 +64,6 @@ class BufferIterator(Iterator):
 
     def stop(self):
         self._buffer_factory.shutdown()
+
+
+
