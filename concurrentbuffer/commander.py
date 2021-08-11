@@ -11,7 +11,7 @@ STOP_MESSAGE = "/stop"
 BUFFER_ID_KEY = "/buffer_id"
 
 
-class Instructor(SubProcessObject):
+class Commander(SubProcessObject):
     @abstractmethod
     def create_message(self) -> dict:
         """This method creates a message that is used to create data in a worker process.
@@ -21,12 +21,12 @@ class Instructor(SubProcessObject):
         """
 
 
-class InstructorProcess:
+class CommanderProcess:
     """Process that sends messages with information on how to create new data"""
 
     def __init__(
         self,
-        instructor: Instructor,
+        commander: Commander,
         buffer_state_memory: BufferStateMemory,
         message_queue: Queue,
         buffer_id_sender: Optional[Connection],
@@ -42,13 +42,13 @@ class InstructorProcess:
         super().__init__()
         self.daemon = True
 
-        self._instructor = instructor
+        self._commander = commander
         self._buffer_state_memory = buffer_state_memory
         self._message_queue = message_queue
         self._buffer_id_sender = buffer_id_sender
 
     def run(self):
-        self._instructor.build()
+        self._commander.build()
         while True:
             buffer_id = self._buffer_state_memory.get_free_buffer_id()
             if buffer_id is None:
@@ -56,27 +56,27 @@ class InstructorProcess:
             self._message(buffer_id)
 
     def _message(self, buffer_id, *args, **kwargs):
-        message = self._instructor.create_message(*args, **kwargs)
+        message = self._commander.create_message(*args, **kwargs)
         message[BUFFER_ID_KEY] = buffer_id
         self._message_queue.put(message)
         if self._buffer_id_sender is not None:
             self._buffer_id_sender.send(buffer_id)
 
 
-class InstructorForkProcess(InstructorProcess, ForkProcess):
+class CommanderForkProcess(CommanderProcess, ForkProcess):
     def __init__(self, *args, **kwargs):
         ForkProcess.__init__(self)
-        InstructorProcess.__init__(self, *args, **kwargs)
+        CommanderProcess.__init__(self, *args, **kwargs)
 
 
-class InstructorSpawnProcess(InstructorProcess, SpawnProcess):
+class CommanderSpawnProcess(CommanderProcess, SpawnProcess):
     def __init__(self, *args, **kwargs):
         SpawnProcess.__init__(self)
-        InstructorProcess.__init__(self, *args, **kwargs)
+        CommanderProcess.__init__(self, *args, **kwargs)
 
 
-def get_instructor_process_class_object(context) -> type:
+def get_commander_process_class_object(context) -> type:
     if isinstance(context, ForkContext):
-        return InstructorForkProcess
+        return CommanderForkProcess
     if isinstance(context, SpawnContext):
-        return InstructorSpawnProcess
+        return CommanderSpawnProcess

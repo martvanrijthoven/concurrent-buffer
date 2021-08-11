@@ -4,11 +4,11 @@ from typing import List
 from concurrentbuffer.info import BufferInfo
 from concurrentbuffer.manager import SharedBufferManager
 from concurrentbuffer.memory import BufferMemory
-from concurrentbuffer.instructor import (
+from concurrentbuffer.commander import (
     STOP_MESSAGE,
-    Instructor,
-    InstructorProcess,
-    get_instructor_process_class_object,
+    Commander,
+    CommanderProcess,
+    get_commander_process_class_object,
 )
 from concurrentbuffer.state import BufferStateMemory
 from concurrentbuffer.producer import (
@@ -31,7 +31,7 @@ class BufferFactory:
         self,
         buffer_system: BufferSystem,
         buffer_info: BufferInfo,
-        instructor: Instructor,
+        commander: Commander,
         producer: Producer,
     ):
         """Initialization
@@ -44,10 +44,10 @@ class BufferFactory:
 
         self._buffer_system = buffer_system
         self._buffer_info = buffer_info
-        self._instructor = instructor
+        self._commander = commander
         self._producer = producer
 
-        self._InstructorProcessClass = get_instructor_process_class_object(buffer_system.context)
+        self._CommanderProcessClass = get_commander_process_class_object(buffer_system.context)
         self._ProducerProcessClass = get_producer_process_class_object(buffer_system.context)
 
         self._message_queue = self._buffer_system.context.Queue(maxsize=self._buffer_info.count)
@@ -102,7 +102,7 @@ class BufferFactory:
         )
 
     def _init_message_process(self):
-        self._message_process = self._create_instructor_process()
+        self._message_process = self._create_commander_process()
         self._message_process.start()
 
     def _init_producer_processes(self):
@@ -132,9 +132,9 @@ class BufferFactory:
         # shutdown manager
         self._shared_buffer_manager.shutdown()
 
-    def _create_instructor_process(self) -> InstructorProcess:
-        return self._InstructorProcessClass(
-            instructor=self._instructor,
+    def _create_commander_process(self) -> CommanderProcess:
+        return self._CommanderProcessClass(
+            commander=self._commander,
             buffer_state_memory=self._buffer_state_memory,
             message_queue=self._message_queue,
             buffer_id_sender=self.sender,

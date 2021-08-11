@@ -1,11 +1,11 @@
-from concurrentbuffer.instructor import Instructor
+from concurrentbuffer.commander import Commander
 
 
 """
 Example Message Process
 """
 
-class DataInstructor(Instructor):
+class DataCommander(Commander):
     def __init__(self, times):
         self._index = 0
         self._times = times
