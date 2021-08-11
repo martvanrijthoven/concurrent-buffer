@@ -138,7 +138,7 @@ class IndexCommander(Commander):
         self._index = 0
 
     def create_message(self) -> dict:
-        message = {"index": index}
+        message = {"index": self._index}
         self._index = (self._index + 1) % self._max_index
         return message
 ```
