@@ -1,12 +1,9 @@
 from multiprocessing.context import BaseContext, ForkContext, SpawnContext
 
 import numpy as np
-from concurrentbuffer.factory import (
-    BufferFactory,
-    buffer_iterator_factory,
-)
+from concurrentbuffer.factory import BufferFactory
 from concurrentbuffer.info import BufferInfo
-from concurrentbuffer.iterator import BufferIterator
+from concurrentbuffer.iterator import BufferIterator, buffer_iterator_factory
 from concurrentbuffer.state import BufferState
 from concurrentbuffer.system import BufferSystem
 from example.commander import DataCommander

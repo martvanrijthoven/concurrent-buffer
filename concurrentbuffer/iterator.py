@@ -1,11 +1,18 @@
+import multiprocessing
 from collections.abc import Iterator
 
-from concurrentbuffer.factory import BufferFactory
 import numpy as np
 
+from concurrentbuffer.commander import Commander
+from concurrentbuffer.factory import BufferFactory
+from concurrentbuffer.info import BufferInfo
+from concurrentbuffer.producer import Producer
+from concurrentbuffer.state import BufferState
+from concurrentbuffer.system import BufferSystem
+
+
 class BufferIterator(Iterator):
-    """Iterator that goes through the buffers indefinetly
-    """
+    """Iterator that goes through the buffers indefinetly"""
 
     def __init__(
         self,
@@ -18,7 +25,7 @@ class BufferIterator(Iterator):
             buffer_factory (BufferFactory): factory in which all the components have been created
             auto_free (bool, optional): frees the previous buffer when new data is requested. Defaults to True.
         """
-    
+
         self._buffer_factory = buffer_factory
         self._auto_free_buffer = auto_free_buffer
         self._last_buffer_id = None
@@ -46,10 +53,8 @@ class BufferIterator(Iterator):
     def _next_deterministic(self) -> int:
         next_buffer_id = self._buffer_factory.receiver.recv()
         while True:
-            buffer_id = (
-                self._buffer_factory.buffer_state_memory.get_available_buffer_id_from_id(
-                    buffer_id=next_buffer_id
-                )
+            buffer_id = self._buffer_factory.buffer_state_memory.get_available_buffer_id_from_id(
+                buffer_id=next_buffer_id
             )
             if buffer_id is None:
                 continue
@@ -57,7 +62,9 @@ class BufferIterator(Iterator):
 
     def _next(self) -> int:
         while True:
-            buffer_id = self._buffer_factory.buffer_state_memory.get_available_buffer_id()
+            buffer_id = (
+                self._buffer_factory.buffer_state_memory.get_available_buffer_id()
+            )
             if buffer_id is None:
                 continue
             return buffer_id
@@ -66,4 +73,28 @@ class BufferIterator(Iterator):
         self._buffer_factory.shutdown()
 
 
+def buffer_iterator_factory(
+    cpus: int,
+    buffer_shape: tuple,
+    commander: Commander,
+    producer: Producer,
+    context: str,
+    deterministic: bool,
+):
+    count = cpus * len(BufferState)
 
+    mp_context = multiprocessing.get_context(context)
+    buffer_system = BufferSystem(
+        cpus=cpus, context=mp_context, deterministic=deterministic
+    )
+
+    buffer_info = BufferInfo(count=count, shape=buffer_shape)
+
+    buffer_factory = BufferFactory(
+        buffer_system=buffer_system,
+        buffer_info=buffer_info,
+        commander=commander,
+        producer=producer,
+    )
+
+    return BufferIterator(buffer_factory=buffer_factory)

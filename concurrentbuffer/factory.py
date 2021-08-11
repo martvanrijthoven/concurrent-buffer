@@ -165,28 +165,3 @@ class BufferFactory:
         return producer_processes
 
 
-def buffer_iterator_factory(
-    cpus: int,
-    buffer_shape: tuple,
-    commander: Commander,
-    producer: Producer,
-    context: str,
-    deterministic: bool,
-):
-    count = cpus * len(BufferState)
-
-    mp_context = multiprocessing.get_context(context)
-    buffer_system = BufferSystem(
-        cpus=cpus, context=mp_context, deterministic=deterministic
-    )
-
-    buffer_info = BufferInfo(count=count, shape=buffer_shape)
-
-    buffer_factory = BufferFactory(
-        buffer_system=buffer_system,
-        buffer_info=buffer_info,
-        commander=commander,
-        producer=producer,
-    )
-
-    return BufferIterator(buffer_factory=buffer_factory)
