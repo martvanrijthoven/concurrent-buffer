@@ -1,9 +1,9 @@
-concurrentbuffer.producer.ProducerProcess
-=========================================
+concurrentbuffer.commander.CommanderProcess
+===========================================
 
-.. currentmodule:: concurrentbuffer.producer
+.. currentmodule:: concurrentbuffer.commander
 
-.. autoclass:: ProducerProcess
+.. autoclass:: CommanderProcess
    :members:                                   
    :show-inheritance:                           
    :inherited-members:                          
@@ -16,8 +16,8 @@ concurrentbuffer.producer.ProducerProcess
 
    .. autosummary::
    
-      ~ProducerProcess.__init__
-      ~ProducerProcess.run
+      ~CommanderProcess.__init__
+      ~CommanderProcess.run
    
    
 

@@ -1,0 +1,44 @@
+concurrentbuffer.commander.CommanderSpawnProcess
+================================================
+
+.. currentmodule:: concurrentbuffer.commander
+
+.. autoclass:: CommanderSpawnProcess
+   :members:                                   
+   :show-inheritance:                           
+   :inherited-members:                          
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~CommanderSpawnProcess.__init__
+      ~CommanderSpawnProcess.close
+      ~CommanderSpawnProcess.is_alive
+      ~CommanderSpawnProcess.join
+      ~CommanderSpawnProcess.kill
+      ~CommanderSpawnProcess.run
+      ~CommanderSpawnProcess.start
+      ~CommanderSpawnProcess.terminate
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CommanderSpawnProcess.authkey
+      ~CommanderSpawnProcess.daemon
+      ~CommanderSpawnProcess.exitcode
+      ~CommanderSpawnProcess.ident
+      ~CommanderSpawnProcess.name
+      ~CommanderSpawnProcess.pid
+      ~CommanderSpawnProcess.sentinel
+   
+   

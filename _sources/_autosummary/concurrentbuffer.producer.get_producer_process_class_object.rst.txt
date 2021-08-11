@@ -1,6 +1,0 @@
-concurrentbuffer.producer.get\_producer\_process\_class\_object
-===============================================================
-
-.. currentmodule:: concurrentbuffer.producer
-
-.. autofunction:: get_producer_process_class_object

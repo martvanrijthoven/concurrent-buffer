@@ -1,0 +1,44 @@
+concurrentbuffer.commander.CommanderForkProcess
+===============================================
+
+.. currentmodule:: concurrentbuffer.commander
+
+.. autoclass:: CommanderForkProcess
+   :members:                                   
+   :show-inheritance:                           
+   :inherited-members:                          
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~CommanderForkProcess.__init__
+      ~CommanderForkProcess.close
+      ~CommanderForkProcess.is_alive
+      ~CommanderForkProcess.join
+      ~CommanderForkProcess.kill
+      ~CommanderForkProcess.run
+      ~CommanderForkProcess.start
+      ~CommanderForkProcess.terminate
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CommanderForkProcess.authkey
+      ~CommanderForkProcess.daemon
+      ~CommanderForkProcess.exitcode
+      ~CommanderForkProcess.ident
+      ~CommanderForkProcess.name
+      ~CommanderForkProcess.pid
+      ~CommanderForkProcess.sentinel
+   
+   

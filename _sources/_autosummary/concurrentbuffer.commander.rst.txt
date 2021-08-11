@@ -1,7 +1,7 @@
-concurrentbuffer.producer
-=========================
+concurrentbuffer.commander
+==========================
 
-.. automodule:: concurrentbuffer.producer
+.. automodule:: concurrentbuffer.commander
   
    
    
@@ -14,7 +14,7 @@ concurrentbuffer.producer
    .. autosummary::
       :toctree:                                          
    
-      get_producer_process_class_object
+      get_commander_process_class_object
    
    
 
@@ -26,10 +26,10 @@ concurrentbuffer.producer
       :toctree:                                         
       :template: custom-class-template.rst               
    
-      Producer
-      ProducerForkProcess
-      ProducerProcess
-      ProducerSpawnProcess
+      Commander
+      CommanderForkProcess
+      CommanderProcess
+      CommanderSpawnProcess
    
    
 

@@ -1,9 +1,9 @@
-concurrentbuffer.producer.Producer
-==================================
+concurrentbuffer.commander.Commander
+====================================
 
-.. currentmodule:: concurrentbuffer.producer
+.. currentmodule:: concurrentbuffer.commander
 
-.. autoclass:: Producer
+.. autoclass:: Commander
    :members:                                   
    :show-inheritance:                           
    :inherited-members:                          
@@ -16,9 +16,9 @@ concurrentbuffer.producer.Producer
 
    .. autosummary::
    
-      ~Producer.__init__
-      ~Producer.build
-      ~Producer.create_data
+      ~Commander.__init__
+      ~Commander.build
+      ~Commander.create_message
    
    
 

@@ -1,0 +1,6 @@
+concurrentbuffer.commander.get\_commander\_process\_class\_object
+=================================================================
+
+.. currentmodule:: concurrentbuffer.commander
+
+.. autofunction:: get_commander_process_class_object

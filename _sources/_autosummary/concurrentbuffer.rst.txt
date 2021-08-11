@@ -28,9 +28,9 @@
    :template: custom-module-template.rst                 
    :recursive:
 
+   concurrentbuffer.commander
    concurrentbuffer.factory
    concurrentbuffer.info
-   concurrentbuffer.instructor
    concurrentbuffer.iterator
    concurrentbuffer.manager
    concurrentbuffer.memory
