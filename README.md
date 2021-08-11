@@ -11,6 +11,10 @@ The available number of central processing units (CPUs) in home and server compu
 This package aims to be a general solution for a particular buffer, a concurrent buffer, .i.e., a buffer filled with data using parallel running 'producer' processes.
 A commander process controls the produced data via user-defined dictionary messages. At the same time, the main process can consume the data using a BufferIterator in a fast and user-friendly way.
 
+Please see below an example on how to use this package as well as how to create your own commander and producer. For more information please see the [docs](https://martvanrijthoven.github.io/concurrent-buffer/). Feel free to open issue if you have anny questions or remarks.
+
+
+
 #### Example usage:
 
 ```python
@@ -104,4 +108,3 @@ class DataProducer(Producer):
         #TODO use index and self._data_shape to create and process a numpy array
 ```
 
-For more information please see the [docs](https://martvanrijthoven.github.io/concurrent-buffer/). Feel free to open issue if you have anny questions or remarks.
