@@ -1,0 +1,322 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>concurrentbuffer.factory &#8212; concurrent-buffer 0.0.1 documentation</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet" />
+  <link href="../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../../index.html">
+<p class="title">concurrent-buffer</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../index.html">
+  Home page
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <h1>Source code for concurrentbuffer.factory</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">concurrentbuffer.commander</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">STOP_MESSAGE</span><span class="p">,</span>
+    <span class="n">Commander</span><span class="p">,</span>
+    <span class="n">CommanderProcess</span><span class="p">,</span>
+    <span class="n">get_commander_process_class_object</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.info</span> <span class="kn">import</span> <span class="n">BufferInfo</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.manager</span> <span class="kn">import</span> <span class="n">SharedBufferManager</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.memory</span> <span class="kn">import</span> <span class="n">BufferMemory</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.producer</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Producer</span><span class="p">,</span>
+    <span class="n">ProducerProcess</span><span class="p">,</span>
+    <span class="n">get_producer_process_class_object</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.state</span> <span class="kn">import</span> <span class="n">BufferStateMemory</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.system</span> <span class="kn">import</span> <span class="n">BufferSystem</span>
+
+<span class="c1"># use spawn with pickable object</span>
+<span class="c1"># use spawn with build function</span>
+<span class="c1"># use fork</span>
+<span class="c1"># use fork with build function</span>
+
+
+<div class="viewcode-block" id="BufferFactory"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.factory.BufferFactory.html#concurrentbuffer.factory.BufferFactory">[docs]</a><span class="k">class</span> <span class="nc">BufferFactory</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Factory that builds all the components&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BufferFactory.__init__"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.factory.BufferFactory.html#concurrentbuffer.factory.BufferFactory.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">buffer_system</span><span class="p">:</span> <span class="n">BufferSystem</span><span class="p">,</span>
+        <span class="n">buffer_info</span><span class="p">:</span> <span class="n">BufferInfo</span><span class="p">,</span>
+        <span class="n">commander</span><span class="p">:</span> <span class="n">Commander</span><span class="p">,</span>
+        <span class="n">producer</span><span class="p">:</span> <span class="n">Producer</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialization</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cpus (int): number of cpus used for the producer processes</span>
+<span class="sd">            buffer_info (BufferInfo): info about count, shape and type of the buffers</span>
+<span class="sd">            deterministic (bool, optional): determines if creation/retreiving of data is determinstic. Defaults to True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_system</span> <span class="o">=</span> <span class="n">buffer_system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span> <span class="o">=</span> <span class="n">buffer_info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_commander</span> <span class="o">=</span> <span class="n">commander</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_producer</span> <span class="o">=</span> <span class="n">producer</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_CommanderProcessClass</span> <span class="o">=</span> <span class="n">get_commander_process_class_object</span><span class="p">(</span>
+            <span class="n">buffer_system</span><span class="o">.</span><span class="n">context</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ProducerProcessClass</span> <span class="o">=</span> <span class="n">get_producer_process_class_object</span><span class="p">(</span>
+            <span class="n">buffer_system</span><span class="o">.</span><span class="n">context</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_message_queue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_system</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">Queue</span><span class="p">(</span>
+            <span class="n">maxsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="o">.</span><span class="n">count</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_receiver</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sender</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_system</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">Pipe</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_system</span><span class="o">.</span><span class="n">deterministic</span>
+            <span class="k">else</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_system</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_shared_buffer_manager</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_buffer_state_memory</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_buffer_memory</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_message_process</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_producer_processes</span><span class="p">()</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">buffer_system</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_system</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">buffer_state_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_state_memory</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">buffer_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_memory</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_receiver</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sender</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sender</span>
+
+    <span class="k">def</span> <span class="nf">_init_shared_buffer_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shared_buffer_manager</span> <span class="o">=</span> <span class="n">SharedBufferManager</span><span class="p">(</span><span class="n">buffer_info</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shared_buffer_manager</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_init_buffer_state_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_state_memory</span> <span class="o">=</span> <span class="n">BufferStateMemory</span><span class="p">(</span>
+            <span class="n">count</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">,</span>
+            <span class="n">buffer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_shared_buffer_manager</span><span class="o">.</span><span class="n">state_buffer</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_init_buffer_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_memory</span> <span class="o">=</span> <span class="n">BufferMemory</span><span class="p">(</span>
+            <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="n">buffers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_shared_buffer_manager</span><span class="o">.</span><span class="n">buffers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_init_message_process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_message_process</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_commander_process</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_message_process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_init_producer_processes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_producer_processes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_producer_processes</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">producer_process</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_producer_processes</span><span class="p">:</span>
+            <span class="n">producer_process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># sending stop messages to queues</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_system</span><span class="o">.</span><span class="n">cpus</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_message_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">STOP_MESSAGE</span><span class="p">)</span>
+
+        <span class="c1"># stop producer processes</span>
+        <span class="k">for</span> <span class="n">producer_process</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_producer_processes</span><span class="p">:</span>
+            <span class="n">producer_process</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+            <span class="n">producer_process</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+        <span class="c1"># stop message process</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_message_process</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_message_process</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+        <span class="c1"># close connections</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_system</span><span class="o">.</span><span class="n">deterministic</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sender</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_receiver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># shutdown manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shared_buffer_manager</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_create_commander_process</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CommanderProcess</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_CommanderProcessClass</span><span class="p">(</span>
+            <span class="n">commander</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_commander</span><span class="p">,</span>
+            <span class="n">buffer_state_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_state_memory</span><span class="p">,</span>
+            <span class="n">message_queue</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_message_queue</span><span class="p">,</span>
+            <span class="n">buffer_id_sender</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_producer_processes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ProducerProcess</span><span class="p">]:</span>
+        <span class="n">producer_processes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_system</span><span class="o">.</span><span class="n">cpus</span><span class="p">):</span>
+            <span class="n">producer_process</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ProducerProcessClass</span><span class="p">(</span>
+                <span class="n">producer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_producer</span><span class="p">,</span>
+                <span class="n">buffer_shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                <span class="n">buffer_state_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_state_memory</span><span class="p">,</span>
+                <span class="n">buffer_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_memory</span><span class="p">,</span>
+                <span class="n">message_queue</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_message_queue</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">producer_processes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">producer_process</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">producer_processes</span></div>
+</pre></div>
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2021, Mart van Rijthoven.<br/>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

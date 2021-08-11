@@ -9,6 +9,13 @@ concurrentbuffer.iterator
 
    
    
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:                                          
+   
+      buffer_iterator_factory
+   
    
 
    

@@ -1,0 +1,6 @@
+concurrentbuffer.iterator.buffer\_iterator\_factory
+===================================================
+
+.. currentmodule:: concurrentbuffer.iterator
+
+.. autofunction:: buffer_iterator_factory
