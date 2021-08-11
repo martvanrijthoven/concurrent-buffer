@@ -41,7 +41,7 @@ Please see below an example on how to use this package as well as how to create 
 
     # You will have to create your own Producer class, please see instructions below
     # a user defined producer, should subclass the Producer class
-    producer = DataProducer(data_shape=BUFFER_SHAPE)
+    producer = DataProducer(data_shape=buffer_shape)
 
     # create a buffer iterator
     buffer_iterator = buffer_iterator_factory(
@@ -87,7 +87,7 @@ context = SpawnContext()
 # if the messages from the commander and the produced data are first in first out
 deterministic = True
 
-# the number of buffers each with shape of BUFFERSHAPE
+# the number of buffers each with shape of buffer_shape
 count = cpus * len(BufferState)
 
 # buffer system contains the information of the system
@@ -104,7 +104,7 @@ commander = IndexCommander(max_index=10)
 
 # You will have to create your own Producer class, please see instructions below
 # a user defined producer, should subclass the Producer class
-producer = DataProducer(data_shape=BUFFER_SHAPE)
+producer = DataProducer(data_shape=buffer_shape)
 
 # a factor class that builds the buffer components
 buffer_factory = BufferFactory(
