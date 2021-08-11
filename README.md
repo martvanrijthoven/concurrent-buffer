@@ -11,13 +11,23 @@ The available number of central processing units (CPUs) in home and server compu
 This package aims to be a general solution for a particular buffer, a concurrent buffer, .i.e., a buffer filled with data using parallel running 'producer' processes.
 A commander process controls the produced data via user-defined dictionary messages. At the same time, the main process can consume the data using a BufferIterator in a fast and user-friendly way.
 
+## Installation and Dependencies
+
+This package requires [numpy](https://github.com/numpy/numpy) 
+
+A binary installer for the latest version is available at the [Python Package Index (PyPI)](https://pypi.org/project/concurrentbuffer/)
+```bash
+pip install concurrentbuffer
+```
+
 Please see below an example on how to use this package as well as how to create your own commander and producer. For more information please see the [docs](https://martvanrijthoven.github.io/concurrent-buffer/). Feel free to open issue if you have any questions or remarks.
 
 
 
-### Example usage:
 
-#### Easy Usage:
+## Example usage:
+
+### Easy Usage:
 
 ```python     
 
@@ -62,7 +72,7 @@ Please see below an example on how to use this package as well as how to create 
         
 ```
 
-#### Advanced Usage:
+### Advanced Usage:
 
 ```python
 
@@ -122,7 +132,7 @@ with BufferIterator(buffer_factory=buffer_factory) as data_buffer_iterator:
 ```
 
 
-###### Creating a Commander
+#### Creating a Commander
 ```
 from concurrentbuffer.commander import Commander
 class IndexCommander(Commander):
@@ -137,7 +147,7 @@ class IndexCommander(Commander):
 ```
 
 
-###### Creating a Producer
+#### Creating a Producer
 ```
 import numpy as np
 from concurrentbuffer.producer import Producer
