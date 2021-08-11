@@ -13,7 +13,7 @@ A commander process controls the produced data via user-defined dictionary messa
 
 ## Installation and Dependencies
 
-This package requires python>=3.8 and [numpy](https://github.com/numpy/numpy) 
+This package requires [python>=3.8](https://www.python.org/downloads/) and [numpy](https://github.com/numpy/numpy) 
 
 A binary installer for the latest version is available at the [Python Package Index (PyPI)](https://pypi.org/project/concurrentbuffer/)
 ```bash
