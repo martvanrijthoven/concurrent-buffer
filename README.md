@@ -21,7 +21,7 @@ Please see below an example on how to use this package as well as how to create 
 
 ```python     
 
-    from concurrentbuffer.factory import buffer_iterator_factory
+    from concurrentbuffer.iterator import buffer_iterator_factory
 
     # the number of cpus/producers
     cpus = 8
