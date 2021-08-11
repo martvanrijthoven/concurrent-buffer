@@ -13,7 +13,7 @@ A commander process controls the produced data via user-defined dictionary messa
 
 Please see below the [installation instructions](#installation-and-dependencies) and an [example](#example-usage) on how to use this package as well as how to [create your own commander](#creating-a-commander) and how to [create your own producer](#creating-a-producer). For more information please see the [docs](https://martvanrijthoven.github.io/concurrent-buffer/). Feel free to open issue if you have any questions or remarks.
 
-### Installation and Dependencies
+## Installation and Dependencies
 
 This package requires [python>=3.8](https://www.python.org/downloads/) and [numpy](https://github.com/numpy/numpy) 
 
@@ -22,7 +22,7 @@ A binary installer for the latest version is available at the [Python Package In
 pip install concurrentbuffer
 ```
 
-### Example usage:
+## Example usage:
 
 ###### Easy Usage:
 
