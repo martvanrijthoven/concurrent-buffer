@@ -196,11 +196,19 @@
         <span class="n">ProducerProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 
+<span class="n">_concrete_context_processes</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ForkContext</span><span class="p">:</span> <span class="n">ProducerForkProcess</span><span class="p">,</span>
+    <span class="n">SpawnContext</span><span class="p">:</span> <span class="n">ProducerSpawnProcess</span><span class="p">,</span>
+<span class="p">}</span>
+
+
 <div class="viewcode-block" id="get_producer_process_class_object"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.producer.get_producer_process_class_object.html#concurrentbuffer.producer.get_producer_process_class_object">[docs]</a><span class="k">def</span> <span class="nf">get_producer_process_class_object</span><span class="p">(</span><span class="n">context</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">ForkContext</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">ProducerForkProcess</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">SpawnContext</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">ProducerSpawnProcess</span></div>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_concrete_context_processes</span><span class="p">[</span><span class="n">context</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;cannot find producer process class with context </span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span> <span class="bp">None</span></div>
 </pre></div>
 
               </div>
