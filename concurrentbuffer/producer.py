@@ -95,7 +95,7 @@ def get_producer_process_class_object(context: type) -> type:
     Returns:
         type: producer process with specific context (either ProducerForkProcess or ProducerSpawnProcess)
     """
-    
+
     try:
         return _CONCRETE_PRODUCER_CONTEXT_PROCESSES[type(context)]
     except KeyError:

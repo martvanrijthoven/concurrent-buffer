@@ -46,10 +46,10 @@ class BufferFactory:
         self._commander = commander
         self._producer = producer
 
-        self._CommanderProcessClass = get_commander_process_class_object(
+        self._commander_process_class = get_commander_process_class_object(
             buffer_system.context
         )
-        self._ProducerProcessClass = get_producer_process_class_object(
+        self._producer_process_class = get_producer_process_class_object(
             buffer_system.context
         )
 
@@ -140,7 +140,7 @@ class BufferFactory:
         self._shared_buffer_manager.shutdown()
 
     def _create_commander_process(self) -> CommanderProcess:
-        return self._CommanderProcessClass(
+        return self._commander_process_class(
             commander=self._commander,
             buffer_state_memory=self._buffer_state_memory,
             message_queue=self._message_queue,
@@ -150,7 +150,7 @@ class BufferFactory:
     def _create_producer_processes(self) -> List[ProducerProcess]:
         producer_processes = []
         for _ in range(self._buffer_system.cpus):
-            producer_process = self._ProducerProcessClass(
+            producer_process = self._producer_process_class(
                 producer=self._producer,
                 buffer_shape=self._buffer_info.shape,
                 buffer_state_memory=self._buffer_state_memory,

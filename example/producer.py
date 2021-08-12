@@ -3,10 +3,6 @@ import time
 import numpy as np
 from concurrentbuffer.producer import Producer
 
-"""
-Example Worker Process
-"""
-
 
 class DataProducer(Producer):
     def __init__(self, data_shape):

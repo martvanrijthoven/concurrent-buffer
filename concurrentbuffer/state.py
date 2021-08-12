@@ -13,11 +13,11 @@ class BufferState(Enum):
     PROCESSING = 4
 
 
-def _lock_state_buffer(f):
-    @wraps(f)
+def _lock_state_buffer(method):
+    @wraps(method)
     def wrapper(self, *args, **kwargs):
         self.lock.acquire()
-        out = f(self, *args, **kwargs)
+        out = method(self, *args, **kwargs)
         self.lock.release()
         return out
 

@@ -15,7 +15,7 @@ class BufferMemory:
             dtype (type): type of the buffers
             buffers (List[SharedMemory]): the data memory of the buffers
         """
-        
+
         self._shape = shape
         self._dtype = dtype
         self._buffers = buffers

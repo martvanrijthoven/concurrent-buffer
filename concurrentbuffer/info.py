@@ -3,7 +3,7 @@ import numpy as np
 class BufferInfo:
     """Class that contains information about the count, shape and type of the buffers
     """
-    
+
     def __init__(
         self,
         count: int,
