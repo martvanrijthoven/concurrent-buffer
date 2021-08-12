@@ -11,6 +11,8 @@ from concurrentbuffer.state import BufferStateMemory
 
 
 class Producer(SubProcessObject):
+    """Abstract producer class used to create custom producers"""
+
     @abstractmethod
     def create_data(self, message: dict) -> np.ndarray:
         """This method creates the data based on a message and puts it into a buffer.
@@ -61,26 +63,41 @@ class ProducerProcess:
 
 
 class ProducerForkProcess(ProducerProcess, ForkProcess):
+    """Producer class based on multiprocessing fork context process"""
+
     def __init__(self, *args, **kwargs):
         ForkProcess.__init__(self)
         ProducerProcess.__init__(self, *args, **kwargs)
 
 
 class ProducerSpawnProcess(ProducerProcess, SpawnProcess):
+    """Producer class based on multiprocessing spawn context process"""
+
     def __init__(self, *args, **kwargs):
         SpawnProcess.__init__(self)
         ProducerProcess.__init__(self, *args, **kwargs)
 
 
-_concrete_context_processes = {
+_CONCRETE_PRODUCER_CONTEXT_PROCESSES = {
     ForkContext: ProducerForkProcess,
     SpawnContext: ProducerSpawnProcess,
 }
 
+def get_producer_process_class_object(context: type) -> type:
+    """Factory function for creating a process class object based on a specific context
 
-def get_producer_process_class_object(context) -> type:
+    Args:
+        context (type): type of context (should be either ForkContext or SpawnContext)
+
+    Raises:
+        ValueError: context was not found in supported context processes
+
+    Returns:
+        type: producer process with specific context (either ProducerForkProcess or ProducerSpawnProcess)
+    """
+    
     try:
-        return _concrete_context_processes[context]
+        return _CONCRETE_PRODUCER_CONTEXT_PROCESSES[type(context)]
     except KeyError:
         raise ValueError(
             f"cannot find producer process class with context {context}"

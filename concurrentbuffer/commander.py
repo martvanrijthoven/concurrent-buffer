@@ -12,6 +12,8 @@ BUFFER_ID_KEY = "/buffer_id"
 
 
 class Commander(SubProcessObject):
+    """Abstract commander class used to create a custom commander"""
+
     @abstractmethod
     def create_message(self) -> dict:
         """This method creates a message that is used to create data in a worker process.
@@ -64,12 +66,16 @@ class CommanderProcess:
 
 
 class CommanderForkProcess(CommanderProcess, ForkProcess):
+    """Commander class based on multiprocessing fork context process"""
+
     def __init__(self, *args, **kwargs):
         ForkProcess.__init__(self)
         CommanderProcess.__init__(self, *args, **kwargs)
 
 
 class CommanderSpawnProcess(CommanderProcess, SpawnProcess):
+    """Commander class based on multiprocessing spawn context process"""
+
     def __init__(self, *args, **kwargs):
         SpawnProcess.__init__(self)
         CommanderProcess.__init__(self, *args, **kwargs)
@@ -82,8 +88,20 @@ _concrete_context_processes = {
 
 
 def get_commander_process_class_object(context) -> type:
+    """Factory function for creating a process class object based on a specific context
+
+    Args:
+        context (type): type of context (should be either ForkContext or SpawnContext)
+
+    Raises:
+        ValueError: context was not found in supported context processes
+
+    Returns:
+        type: producer process with specific context (either CommanderForkProcess or CommanderSpawnProcess)
+    """
+
     try:
-        return _concrete_context_processes[context]
+        return _concrete_context_processes[type(context)]
     except KeyError:
         raise ValueError(
             f"cannot find commander process class with context {context}"
