@@ -72,8 +72,16 @@ class ProducerSpawnProcess(ProducerProcess, SpawnProcess):
         ProducerProcess.__init__(self, *args, **kwargs)
 
 
+_concrete_context_processes = {
+    ForkContext: ProducerForkProcess,
+    SpawnContext: ProducerSpawnProcess,
+}
+
+
 def get_producer_process_class_object(context) -> type:
-    if isinstance(context, ForkContext):
-        return ProducerForkProcess
-    if isinstance(context, SpawnContext):
-        return ProducerSpawnProcess
+    try:
+        return _concrete_context_processes[context]
+    except KeyError:
+        raise ValueError(
+            f"cannot find producer process class with context {context}"
+        ) from None

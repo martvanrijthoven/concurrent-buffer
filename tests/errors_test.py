@@ -1,6 +1,9 @@
 from concurrentbuffer.info import BufferInfo
 from concurrentbuffer.manager import SharedBufferManager, SharedBufferManagerNotStarted
 from concurrentbuffer.state import BufferState
+from concurrentbuffer.commander import get_commander_process_class_object
+from concurrentbuffer.producer import get_producer_process_class_object
+from multiprocessing.context import ForkServerContext
 from pytest import raises
 
 
@@ -24,3 +27,12 @@ class TestErrors:
             buffer_info = BufferInfo(count=count, shape=buffer_shape)
             shared_buffer_manager = SharedBufferManager(buffer_info=buffer_info)
             shared_buffer_manager.state_buffer
+
+
+    def test_get_commander_process_class_object(self):
+        with raises(ValueError):
+            get_commander_process_class_object(ForkServerContext)
+
+    def test_get_producer_process_class_object(self):
+        with raises(ValueError):
+            get_producer_process_class_object(ForkServerContext)

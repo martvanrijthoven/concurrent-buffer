@@ -75,8 +75,16 @@ class CommanderSpawnProcess(CommanderProcess, SpawnProcess):
         CommanderProcess.__init__(self, *args, **kwargs)
 
 
+_concrete_context_processes = {
+    ForkContext: CommanderForkProcess,
+    SpawnContext: CommanderSpawnProcess,
+}
+
+
 def get_commander_process_class_object(context) -> type:
-    if isinstance(context, ForkContext):
-        return CommanderForkProcess
-    if isinstance(context, SpawnContext):
-        return CommanderSpawnProcess
+    try:
+        return _concrete_context_processes[context]
+    except KeyError:
+        raise ValueError(
+            f"cannot find commander process class with context {context}"
+        ) from None
