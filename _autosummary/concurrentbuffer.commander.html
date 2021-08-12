@@ -372,12 +372,7 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="concurrentbuffer.commander.get_commander_process_class_object.html#concurrentbuffer.commander.get_commander_process_class_object" title="concurrentbuffer.commander.get_commander_process_class_object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_commander_process_class_object</span></code></a>(context)</p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">rtype</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
-</dd>
-</dl>
-</p></td>
+<td><p>Factory function for creating a process class object based on a specific context</p></td>
 </tr>
 </tbody>
 </table>
@@ -389,16 +384,16 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="concurrentbuffer.commander.Commander.html#concurrentbuffer.commander.Commander" title="concurrentbuffer.commander.Commander"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Commander</span></code></a>()</p></td>
-<td><p></p></td>
+<td><p>Abstract commander class used to create a custom commander</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="concurrentbuffer.commander.CommanderForkProcess.html#concurrentbuffer.commander.CommanderForkProcess" title="concurrentbuffer.commander.CommanderForkProcess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CommanderForkProcess</span></code></a>(*args, **kwargs)</p></td>
-<td><p>Init</p></td>
+<td><p>Commander class based on multiprocessing fork context process</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="concurrentbuffer.commander.CommanderProcess.html#concurrentbuffer.commander.CommanderProcess" title="concurrentbuffer.commander.CommanderProcess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CommanderProcess</span></code></a>(commander, …)</p></td>
 <td><p>Process that sends messages with information on how to create new data</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="concurrentbuffer.commander.CommanderSpawnProcess.html#concurrentbuffer.commander.CommanderSpawnProcess" title="concurrentbuffer.commander.CommanderSpawnProcess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CommanderSpawnProcess</span></code></a>(*args, **kwargs)</p></td>
-<td><p>Init</p></td>
+<td><p>Commander class based on multiprocessing spawn context process</p></td>
 </tr>
 </tbody>
 </table>

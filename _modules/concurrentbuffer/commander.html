@@ -136,6 +136,8 @@
 
 
 <div class="viewcode-block" id="Commander"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.commander.Commander.html#concurrentbuffer.commander.Commander">[docs]</a><span class="k">class</span> <span class="nc">Commander</span><span class="p">(</span><span class="n">SubProcessObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Abstract commander class used to create a custom commander&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Commander.create_message"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.commander.Commander.html#concurrentbuffer.commander.Commander.create_message">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">create_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;This method creates a message that is used to create data in a worker process.</span>
@@ -188,12 +190,16 @@
 
 
 <div class="viewcode-block" id="CommanderForkProcess"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.commander.CommanderForkProcess.html#concurrentbuffer.commander.CommanderForkProcess">[docs]</a><span class="k">class</span> <span class="nc">CommanderForkProcess</span><span class="p">(</span><span class="n">CommanderProcess</span><span class="p">,</span> <span class="n">ForkProcess</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Commander class based on multiprocessing fork context process&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="CommanderForkProcess.__init__"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.commander.CommanderForkProcess.html#concurrentbuffer.commander.CommanderForkProcess.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">ForkProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">CommanderProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="CommanderSpawnProcess"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.commander.CommanderSpawnProcess.html#concurrentbuffer.commander.CommanderSpawnProcess">[docs]</a><span class="k">class</span> <span class="nc">CommanderSpawnProcess</span><span class="p">(</span><span class="n">CommanderProcess</span><span class="p">,</span> <span class="n">SpawnProcess</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Commander class based on multiprocessing spawn context process&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="CommanderSpawnProcess.__init__"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.commander.CommanderSpawnProcess.html#concurrentbuffer.commander.CommanderSpawnProcess.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">SpawnProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">CommanderProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
@@ -206,8 +212,20 @@
 
 
 <div class="viewcode-block" id="get_commander_process_class_object"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.commander.get_commander_process_class_object.html#concurrentbuffer.commander.get_commander_process_class_object">[docs]</a><span class="k">def</span> <span class="nf">get_commander_process_class_object</span><span class="p">(</span><span class="n">context</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Factory function for creating a process class object based on a specific context</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        context (type): type of context (should be either ForkContext or SpawnContext)</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: context was not found in supported context processes</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        type: producer process with specific context (either CommanderForkProcess or CommanderSpawnProcess)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_concrete_context_processes</span><span class="p">[</span><span class="n">context</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">_concrete_context_processes</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">context</span><span class="p">)]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;cannot find commander process class with context </span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">&quot;</span>

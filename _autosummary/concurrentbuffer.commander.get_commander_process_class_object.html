@@ -367,7 +367,16 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="concurrentbuffer.commander.get_commander_process_class_object">
 <span class="sig-name descname"><span class="pre">get_commander_process_class_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/concurrentbuffer/commander.html#get_commander_process_class_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#concurrentbuffer.commander.get_commander_process_class_object" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Factory function for creating a process class object based on a specific context</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>context (type): type of context (should be either ForkContext or SpawnContext)</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: context was not found in supported context processes</p>
+</dd>
+<dt>Returns:</dt><dd><p>type: producer process with specific context (either CommanderForkProcess or CommanderSpawnProcess)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
 </dd>

@@ -135,6 +135,8 @@
 
 
 <div class="viewcode-block" id="Producer"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.producer.Producer.html#concurrentbuffer.producer.Producer">[docs]</a><span class="k">class</span> <span class="nc">Producer</span><span class="p">(</span><span class="n">SubProcessObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Abstract producer class used to create custom producers&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Producer.create_data"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.producer.Producer.html#concurrentbuffer.producer.Producer.create_data">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">create_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;This method creates the data based on a message and puts it into a buffer.</span>
@@ -185,26 +187,41 @@
 
 
 <div class="viewcode-block" id="ProducerForkProcess"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.producer.ProducerForkProcess.html#concurrentbuffer.producer.ProducerForkProcess">[docs]</a><span class="k">class</span> <span class="nc">ProducerForkProcess</span><span class="p">(</span><span class="n">ProducerProcess</span><span class="p">,</span> <span class="n">ForkProcess</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Producer class based on multiprocessing fork context process&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="ProducerForkProcess.__init__"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.producer.ProducerForkProcess.html#concurrentbuffer.producer.ProducerForkProcess.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">ForkProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">ProducerProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="ProducerSpawnProcess"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.producer.ProducerSpawnProcess.html#concurrentbuffer.producer.ProducerSpawnProcess">[docs]</a><span class="k">class</span> <span class="nc">ProducerSpawnProcess</span><span class="p">(</span><span class="n">ProducerProcess</span><span class="p">,</span> <span class="n">SpawnProcess</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Producer class based on multiprocessing spawn context process&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="ProducerSpawnProcess.__init__"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.producer.ProducerSpawnProcess.html#concurrentbuffer.producer.ProducerSpawnProcess.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">SpawnProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">ProducerProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 
-<span class="n">_concrete_context_processes</span> <span class="o">=</span> <span class="p">{</span>
+<span class="n">_CONCRETE_PRODUCER_CONTEXT_PROCESSES</span> <span class="o">=</span> <span class="p">{</span>
     <span class="n">ForkContext</span><span class="p">:</span> <span class="n">ProducerForkProcess</span><span class="p">,</span>
     <span class="n">SpawnContext</span><span class="p">:</span> <span class="n">ProducerSpawnProcess</span><span class="p">,</span>
 <span class="p">}</span>
 
+<div class="viewcode-block" id="get_producer_process_class_object"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.producer.get_producer_process_class_object.html#concurrentbuffer.producer.get_producer_process_class_object">[docs]</a><span class="k">def</span> <span class="nf">get_producer_process_class_object</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Factory function for creating a process class object based on a specific context</span>
 
-<div class="viewcode-block" id="get_producer_process_class_object"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.producer.get_producer_process_class_object.html#concurrentbuffer.producer.get_producer_process_class_object">[docs]</a><span class="k">def</span> <span class="nf">get_producer_process_class_object</span><span class="p">(</span><span class="n">context</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
+<span class="sd">    Args:</span>
+<span class="sd">        context (type): type of context (should be either ForkContext or SpawnContext)</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: context was not found in supported context processes</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        type: producer process with specific context (either ProducerForkProcess or ProducerSpawnProcess)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_concrete_context_processes</span><span class="p">[</span><span class="n">context</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">_CONCRETE_PRODUCER_CONTEXT_PROCESSES</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">context</span><span class="p">)]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;cannot find producer process class with context </span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">&quot;</span>

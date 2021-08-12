@@ -372,12 +372,7 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="concurrentbuffer.producer.get_producer_process_class_object.html#concurrentbuffer.producer.get_producer_process_class_object" title="concurrentbuffer.producer.get_producer_process_class_object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_producer_process_class_object</span></code></a>(context)</p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">rtype</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
-</dd>
-</dl>
-</p></td>
+<td><p>Factory function for creating a process class object based on a specific context</p></td>
 </tr>
 </tbody>
 </table>
@@ -389,16 +384,16 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="concurrentbuffer.producer.Producer.html#concurrentbuffer.producer.Producer" title="concurrentbuffer.producer.Producer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Producer</span></code></a>()</p></td>
-<td><p></p></td>
+<td><p>Abstract producer class used to create custom producers</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="concurrentbuffer.producer.ProducerForkProcess.html#concurrentbuffer.producer.ProducerForkProcess" title="concurrentbuffer.producer.ProducerForkProcess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProducerForkProcess</span></code></a>(*args, **kwargs)</p></td>
-<td><p>Initialization</p></td>
+<td><p>Producer class based on multiprocessing fork context process</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="concurrentbuffer.producer.ProducerProcess.html#concurrentbuffer.producer.ProducerProcess" title="concurrentbuffer.producer.ProducerProcess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProducerProcess</span></code></a>(producer, buffer_shape, …)</p></td>
 <td><p>Process that creates data and puts in into a shared memory buffer.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="concurrentbuffer.producer.ProducerSpawnProcess.html#concurrentbuffer.producer.ProducerSpawnProcess" title="concurrentbuffer.producer.ProducerSpawnProcess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProducerSpawnProcess</span></code></a>(*args, **kwargs)</p></td>
-<td><p>Initialization</p></td>
+<td><p>Producer class based on multiprocessing spawn context process</p></td>
 </tr>
 </tbody>
 </table>
