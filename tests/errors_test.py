@@ -16,7 +16,7 @@ class TestErrors:
             buffer_shape = (12, 284, 284, 3)
             buffer_info = BufferInfo(count=count, shape=buffer_shape)
             shared_buffer_manager = SharedBufferManager(buffer_info=buffer_info)
-            shared_buffer_manager.buffers
+            _ = shared_buffer_manager.buffers
 
     def test_buffer_state_error(self):
 
@@ -26,7 +26,7 @@ class TestErrors:
             buffer_shape = (12, 284, 284, 3)
             buffer_info = BufferInfo(count=count, shape=buffer_shape)
             shared_buffer_manager = SharedBufferManager(buffer_info=buffer_info)
-            shared_buffer_manager.state_buffer
+            _ = shared_buffer_manager.state_buffer
 
 
     def test_get_commander_process_class_object(self):
