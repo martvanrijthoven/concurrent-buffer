@@ -8,6 +8,6 @@ setup(
     packages=['concurrentbuffer'],
     url='http://pypi.python.org/pypi/concurrentbuffer/',
     license='LICENSE.txt',
-    install_requires=['numpy'],
+    install_requires=['numpy>=1.18.1'],
     long_description='',
 )
