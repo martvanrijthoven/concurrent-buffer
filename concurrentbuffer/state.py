@@ -16,9 +16,9 @@ class BufferState(Enum):
 def _lock_state_buffer(f):
     @wraps(f)
     def wrapper(self, *args, **kwargs):
-        self._lock.acquire()
+        self.lock.acquire()
         out = f(self, *args, **kwargs)
-        self._lock.release()
+        self.lock.release()
         return out
 
     return wrapper
@@ -41,8 +41,12 @@ class BufferStateMemory:
         self._buffer = buffer
         self._lock = lock
 
-        for id in range(self._count):
-            self.update_buffer_id_to_free(buffer_id=id)
+        for buffer_id in range(self._count):
+            self.update_buffer_id_to_free(buffer_id=buffer_id)
+
+    @property
+    def lock(self):
+        return self._lock
 
     def get_state_buffer(self):
         return np.ndarray(

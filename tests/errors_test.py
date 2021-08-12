@@ -1,9 +1,11 @@
-from concurrentbuffer.info import BufferInfo
-from concurrentbuffer.manager import SharedBufferManager, SharedBufferManagerNotStarted
-from concurrentbuffer.state import BufferState
-from concurrentbuffer.commander import get_commander_process_class_object
-from concurrentbuffer.producer import get_producer_process_class_object
 from multiprocessing.context import ForkServerContext
+
+from concurrentbuffer.commander import get_commander_process_class_object
+from concurrentbuffer.info import BufferInfo
+from concurrentbuffer.manager import (SharedBufferManager,
+                                      SharedBufferManagerNotStarted)
+from concurrentbuffer.producer import get_producer_process_class_object
+from concurrentbuffer.state import BufferState
 from pytest import raises
 
 
