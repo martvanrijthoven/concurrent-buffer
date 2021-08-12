@@ -1,4 +1,4 @@
-concurrentbuffer.state.BufferStateMemory
+﻿concurrentbuffer.state.BufferStateMemory
 ========================================
 
 .. currentmodule:: concurrentbuffer.state
@@ -27,5 +27,11 @@ concurrentbuffer.state.BufferStateMemory
    
 
    
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BufferStateMemory.lock
    
    
