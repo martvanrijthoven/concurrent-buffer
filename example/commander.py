@@ -2,6 +2,8 @@ from concurrentbuffer.commander import Commander
 
 
 class DataCommander(Commander):
+    """Custom Commander class for testing purposes"""
+
     def __init__(self, times):
         self._index = 0
         self._times = times
@@ -10,3 +12,4 @@ class DataCommander(Commander):
         message = {"value": self._times[self._index], "time": self._times[self._index]}
         self._index = (self._index + 1) % len(self._times)
         return message
+        

@@ -5,6 +5,8 @@ from concurrentbuffer.producer import Producer
 
 
 class DataProducer(Producer):
+    """Custom Producer class for testing purposes"""
+
     def __init__(self, data_shape):
         self._data_shape = data_shape
 

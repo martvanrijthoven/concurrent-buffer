@@ -10,6 +10,8 @@ from pytest import raises
 
 
 class TestErrors:
+    """This class contains methods to test errors"""
+
     def test_buffers_error(self):
 
         with raises(SharedBufferManagerNotStarted):
