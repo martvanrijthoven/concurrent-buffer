@@ -219,7 +219,7 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        type: producer process with specific context (either ProducerForkProcess or ProducerSpawnProcess)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
+
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_CONCRETE_PRODUCER_CONTEXT_PROCESSES</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">context</span><span class="p">)]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>

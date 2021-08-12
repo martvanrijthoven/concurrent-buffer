@@ -170,10 +170,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_commander</span> <span class="o">=</span> <span class="n">commander</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_producer</span> <span class="o">=</span> <span class="n">producer</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_CommanderProcessClass</span> <span class="o">=</span> <span class="n">get_commander_process_class_object</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_commander_process_class</span> <span class="o">=</span> <span class="n">get_commander_process_class_object</span><span class="p">(</span>
             <span class="n">buffer_system</span><span class="o">.</span><span class="n">context</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ProducerProcessClass</span> <span class="o">=</span> <span class="n">get_producer_process_class_object</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_producer_process_class</span> <span class="o">=</span> <span class="n">get_producer_process_class_object</span><span class="p">(</span>
             <span class="n">buffer_system</span><span class="o">.</span><span class="n">context</span>
         <span class="p">)</span>
 
@@ -264,7 +264,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_shared_buffer_manager</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_create_commander_process</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CommanderProcess</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_CommanderProcessClass</span><span class="p">(</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commander_process_class</span><span class="p">(</span>
             <span class="n">commander</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_commander</span><span class="p">,</span>
             <span class="n">buffer_state_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_state_memory</span><span class="p">,</span>
             <span class="n">message_queue</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_message_queue</span><span class="p">,</span>
@@ -274,7 +274,7 @@
     <span class="k">def</span> <span class="nf">_create_producer_processes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ProducerProcess</span><span class="p">]:</span>
         <span class="n">producer_processes</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_system</span><span class="o">.</span><span class="n">cpus</span><span class="p">):</span>
-            <span class="n">producer_process</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ProducerProcessClass</span><span class="p">(</span>
+            <span class="n">producer_process</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_producer_process_class</span><span class="p">(</span>
                 <span class="n">producer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_producer</span><span class="p">,</span>
                 <span class="n">buffer_shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
                 <span class="n">buffer_state_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_state_memory</span><span class="p">,</span>
