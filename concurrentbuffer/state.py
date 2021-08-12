@@ -8,7 +8,7 @@ import numpy as np
 
 class BufferState(Enum):
     """States for the shared buffer memory"""
-    
+
     FREE = 1
     AVAILABLE = 2
     RESERVED = 3
