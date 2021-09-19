@@ -412,7 +412,7 @@ message_queue (Queue): queue that receives messages from a MessageProcess that c
 <tr class="row-odd"><td><p><a class="reference internal" href="#concurrentbuffer.producer.ProducerForkProcess.kill" title="concurrentbuffer.producer.ProducerForkProcess.kill"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kill</span></code></a>()</p></td>
 <td><p>Terminate process; sends SIGKILL signal or uses TerminateProcess()</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#concurrentbuffer.producer.ProducerForkProcess.run" title="concurrentbuffer.producer.ProducerForkProcess.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>()</p></td>
 <td><p>Method to be run in sub-process; can be overridden in sub-class</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#concurrentbuffer.producer.ProducerForkProcess.start" title="concurrentbuffer.producer.ProducerForkProcess.start"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start</span></code></a>()</p></td>
@@ -503,6 +503,12 @@ an error to call this method if the child process is still running.</p>
 <dd><p>Return identifier (PID) of process or <cite>None</cite> if it has yet to start</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="concurrentbuffer.producer.ProducerForkProcess.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#concurrentbuffer.producer.ProducerForkProcess.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to be run in sub-process; can be overridden in sub-class</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="concurrentbuffer.producer.ProducerForkProcess.sentinel">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">sentinel</span></span><a class="headerlink" href="#concurrentbuffer.producer.ProducerForkProcess.sentinel" title="Permalink to this definition">¶</a></dt>
@@ -554,7 +560,7 @@ waiting for process termination.</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br/>
 </p>
     </div>
     

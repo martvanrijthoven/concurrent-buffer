@@ -27,7 +27,7 @@
 
    .. autosummary::
    
-      ~BufferFactory.buffer_memory
+      ~BufferFactory.buffer_memories
       ~BufferFactory.buffer_state_memory
       ~BufferFactory.buffer_system
       ~BufferFactory.receiver

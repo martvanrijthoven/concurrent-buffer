@@ -1,4 +1,4 @@
-concurrentbuffer.info.BufferInfo
+﻿concurrentbuffer.info.BufferInfo
 ================================
 
 .. currentmodule:: concurrentbuffer.info
@@ -28,6 +28,6 @@ concurrentbuffer.info.BufferInfo
    
       ~BufferInfo.count
       ~BufferInfo.dtype
-      ~BufferInfo.shape
+      ~BufferInfo.shapes
    
    

@@ -366,7 +366,7 @@
 <h1>concurrentbuffer.producer.ProducerProcess<a class="headerlink" href="#concurrentbuffer-producer-producerprocess" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="concurrentbuffer.producer.ProducerProcess">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ProducerProcess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">producer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_state_memory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_memory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_queue</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/concurrentbuffer/producer.html#ProducerProcess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#concurrentbuffer.producer.ProducerProcess" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ProducerProcess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">producer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_shapes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_state_memory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_memories</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_queue</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/concurrentbuffer/producer.html#ProducerProcess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#concurrentbuffer.producer.ProducerProcess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Process that creates data and puts in into a shared memory buffer.</p>
 <p>Initialization</p>
@@ -379,7 +379,7 @@ message_queue (Queue): queue that receives messages from a MessageProcess that c
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="concurrentbuffer.producer.ProducerProcess.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">producer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_state_memory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_memory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_queue</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/concurrentbuffer/producer.html#ProducerProcess.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#concurrentbuffer.producer.ProducerProcess.__init__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">producer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_shapes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_state_memory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_memories</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_queue</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/concurrentbuffer/producer.html#ProducerProcess.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#concurrentbuffer.producer.ProducerProcess.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialization</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>buffer_shape (tuple): shape of the data in the buffers, needs to be used when creating new data
@@ -397,7 +397,7 @@ message_queue (Queue): queue that receives messages from a MessageProcess that c
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#concurrentbuffer.producer.ProducerProcess.__init__" title="concurrentbuffer.producer.ProducerProcess.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(producer, buffer_shape, …)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#concurrentbuffer.producer.ProducerProcess.__init__" title="concurrentbuffer.producer.ProducerProcess.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(producer, buffer_shapes, ...)</p></td>
 <td><p>Initialization</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code>()</p></td>
@@ -437,7 +437,7 @@ message_queue (Queue): queue that receives messages from a MessageProcess that c
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br/>
 </p>
     </div>
     

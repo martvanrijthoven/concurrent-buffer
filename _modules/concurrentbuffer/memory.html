@@ -123,7 +123,7 @@
                 
   <h1>Source code for concurrentbuffer.memory</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">multiprocessing.shared_memory</span> <span class="kn">import</span> <span class="n">SharedMemory</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -131,7 +131,7 @@
 <div class="viewcode-block" id="BufferMemory"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.memory.BufferMemory.html#concurrentbuffer.memory.BufferMemory">[docs]</a><span class="k">class</span> <span class="nc">BufferMemory</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Class that contains the buffers</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="BufferMemory.__init__"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.memory.BufferMemory.html#concurrentbuffer.memory.BufferMemory.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">buffers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SharedMemory</span><span class="p">]):</span>
+<div class="viewcode-block" id="BufferMemory.__init__"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.memory.BufferMemory.html#concurrentbuffer.memory.BufferMemory.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">buffers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">SharedMemory</span><span class="p">]):</span>
         <span class="sd">&quot;&quot;&quot;INit</span>
 
 <span class="sd">        Args:</span>
@@ -187,7 +187,7 @@
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br/>
 </p>
     </div>
     

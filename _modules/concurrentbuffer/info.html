@@ -130,9 +130,9 @@
 
 <div class="viewcode-block" id="BufferInfo.__init__"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.info.BufferInfo.html#concurrentbuffer.info.BufferInfo.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
+        <span class="n">shapes</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
         <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">shape</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
-        <span class="n">dtype</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s2">&quot;uint8&quot;</span><span class="p">),</span>
+        <span class="n">dtype</span><span class="p">:</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s2">&quot;uint8&quot;</span><span class="p">),</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init</span>
 
@@ -142,17 +142,21 @@
 <span class="sd">            dtype (np.dtype, optional): type of the data in the buffers. Defaults to np.dtype(&quot;uint8&quot;).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shapes</span> <span class="o">=</span> <span class="n">shapes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">shapes</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">=</span> <span class="n">count</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="n">shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dtype</span> <span class="o">=</span> <span class="n">dtype</span></div>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_length</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span>
+    <span class="k">def</span> <span class="nf">shapes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shapes</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">dtype</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">:</span>
@@ -186,7 +190,7 @@
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br/>
 </p>
     </div>
     

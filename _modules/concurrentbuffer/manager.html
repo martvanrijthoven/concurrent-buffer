@@ -166,10 +166,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_state_buffer</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">SharedMemory</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size_holder</span><span class="o">.</span><span class="n">nbytes</span><span class="p">)]</span>
 
     <span class="k">def</span> <span class="nf">_create_buffers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_buffers</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">size_holder</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">buffer_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="o">.</span><span class="n">count</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_buffers</span><span class="p">[</span><span class="n">buffer_id</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SharedMemory</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size_holder</span><span class="o">.</span><span class="n">nbytes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_buffers</span><span class="o">.</span><span class="n">append</span><span class="p">({})</span>
+            <span class="n">size_holder</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="o">.</span><span class="n">shapes</span><span class="p">[</span><span class="n">idx</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">buffer_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_info</span><span class="o">.</span><span class="n">count</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_buffers</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">buffer_id</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SharedMemory</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size_holder</span><span class="o">.</span><span class="n">nbytes</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">state_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SharedMemory</span><span class="p">:</span>
@@ -211,7 +213,7 @@
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br/>
 </p>
     </div>
     
