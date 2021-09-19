@@ -48,7 +48,11 @@ class BufferIterator(Iterator):
             buffer_id = self._next()
 
         self._last_buffer_id = buffer_id
-        return self._buffer_factory.buffer_memory.get_buffer(buffer_id=buffer_id)
+        
+        data = []
+        for buffer_memory in self._buffer_factory.buffer_memories:
+            data.append(buffer_memory.get_buffer(buffer_id=buffer_id).squeeze())
+        return data
 
     def _next_deterministic(self) -> int:
         next_buffer_id = self._buffer_factory.receiver.recv()
@@ -75,11 +79,14 @@ class BufferIterator(Iterator):
 
 def buffer_iterator_factory(
     cpus: int,
-    buffer_shape: tuple,
+    buffer_shapes: tuple,
     commander: Commander,
     producer: Producer,
     context: str,
     deterministic: bool,
+    buffer_iterator_class: type = BufferIterator,
+    *args,
+    **kwargs
 ):
     count = cpus * len(BufferState)
 
@@ -88,7 +95,7 @@ def buffer_iterator_factory(
         cpus=cpus, context=mp_context, deterministic=deterministic
     )
 
-    buffer_info = BufferInfo(count=count, shape=buffer_shape)
+    buffer_info = BufferInfo(count=count, shapes=buffer_shapes)
 
     buffer_factory = BufferFactory(
         buffer_system=buffer_system,
@@ -97,4 +104,4 @@ def buffer_iterator_factory(
         producer=producer,
     )
 
-    return BufferIterator(buffer_factory=buffer_factory)
+    return buffer_iterator_class(buffer_factory=buffer_factory, *args, **kwargs)

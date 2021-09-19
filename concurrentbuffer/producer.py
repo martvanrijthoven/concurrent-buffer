@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from multiprocessing import Queue
 from multiprocessing.context import ForkContext, ForkProcess, SpawnContext, SpawnProcess
+from typing import List
 
 import numpy as np
 
@@ -31,9 +32,9 @@ class ProducerProcess:
     def __init__(
         self,
         producer: Producer,
-        buffer_shape: tuple,
+        buffer_shapes: tuple,
         buffer_state_memory: BufferStateMemory,
-        buffer_memory: BufferMemory,
+        buffer_memories: List[BufferMemory],
         message_queue: Queue,
     ):
         """Initialization
@@ -48,9 +49,9 @@ class ProducerProcess:
         self.daemon = True
 
         self._producer = producer
-        self._buffer_shape = buffer_shape
+        self._buffer_shapes = buffer_shapes
         self._buffer_state_memory = buffer_state_memory
-        self._buffer_memory = buffer_memory
+        self._buffer_memories = buffer_memories
         self._message_queue = message_queue
 
     def run(self):
@@ -58,7 +59,8 @@ class ProducerProcess:
         for message in iter(self._message_queue.get, STOP_MESSAGE):
             buffer_id = message[BUFFER_ID_KEY]
             data = self._producer.create_data(message=message)
-            self._buffer_memory.update_buffer(buffer_id=buffer_id, data=data)
+            for idx, buffer_memory in enumerate(self._buffer_memories):
+                buffer_memory.update_buffer(buffer_id=buffer_id, data=data[idx])
             self._buffer_state_memory.update_buffer_id_to_available(buffer_id=buffer_id)
 
 

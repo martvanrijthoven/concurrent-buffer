@@ -42,10 +42,12 @@ class SharedBufferManager(SharedMemoryManager):
         self._state_buffer = [self.SharedMemory(size=size_holder.nbytes)]
 
     def _create_buffers(self):
-        self._buffers = {}
-        size_holder = np.empty((self._buffer_info.shape), dtype=self._buffer_info.dtype)
-        for buffer_id in range(self._buffer_info.count):
-            self._buffers[buffer_id] = self.SharedMemory(size=size_holder.nbytes)
+        self._buffers = []
+        for idx in range(len(self._buffer_info)):
+            self._buffers.append({})
+            size_holder = np.empty((self._buffer_info.shapes[idx]), dtype=self._buffer_info.dtype)
+            for buffer_id in range(self._buffer_info.count):
+                self._buffers[idx][buffer_id] = self.SharedMemory(size=size_holder.nbytes)
 
     @property
     def state_buffer(self) -> SharedMemory:

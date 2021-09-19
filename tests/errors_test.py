@@ -17,8 +17,8 @@ class TestErrors:
         with raises(SharedBufferManagerNotStarted):
             cpus = 6
             count = cpus * len(BufferState)
-            buffer_shape = (12, 284, 284, 3)
-            buffer_info = BufferInfo(count=count, shape=buffer_shape)
+            buffer_shapes = ((12, 284, 284, 3), (12, 284, 284))
+            buffer_info = BufferInfo(count=count, shapes=buffer_shapes)
             shared_buffer_manager = SharedBufferManager(buffer_info=buffer_info)
             _ = shared_buffer_manager.buffers
 
@@ -27,8 +27,8 @@ class TestErrors:
         with raises(SharedBufferManagerNotStarted):
             cpus = 6
             count = cpus * len(BufferState)
-            buffer_shape = (12, 284, 284, 3)
-            buffer_info = BufferInfo(count=count, shape=buffer_shape)
+            buffer_shapes = ((12, 284, 284, 3), (12, 284, 284))
+            buffer_info = BufferInfo(count=count, shapes=buffer_shapes)
             shared_buffer_manager = SharedBufferManager(buffer_info=buffer_info)
             _ = shared_buffer_manager.state_buffer
 

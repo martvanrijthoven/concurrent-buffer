@@ -1,5 +1,7 @@
 from typing import List
 
+import numpy as np
+
 from concurrentbuffer.commander import (
     STOP_MESSAGE,
     Commander,
@@ -78,8 +80,8 @@ class BufferFactory:
         return self._buffer_state_memory
 
     @property
-    def buffer_memory(self):
-        return self._buffer_memory
+    def buffer_memories(self):
+        return self._buffer_memories
 
     @property
     def receiver(self):
@@ -96,17 +98,21 @@ class BufferFactory:
     def _init_buffer_state_memory(self):
         self._buffer_state_memory = BufferStateMemory(
             count=self._buffer_info.count,
-            dtype=self._buffer_info.dtype,
+            dtype=np.dtype("uint8"),
             lock=self._lock,
             buffer=self._shared_buffer_manager.state_buffer,
         )
 
     def _init_buffer_memory(self):
-        self._buffer_memory = BufferMemory(
-            shape=self._buffer_info.shape,
-            dtype=self._buffer_info.dtype,
-            buffers=self._shared_buffer_manager.buffers,
-        )
+        self._buffer_memories = []
+        for idx in range(len(self._buffer_info)):
+            self._buffer_memories.append(
+                BufferMemory(
+                    shape=self._buffer_info.shapes[idx],
+                    dtype=self._buffer_info.dtype,
+                    buffers=self._shared_buffer_manager.buffers[idx],
+                )
+            )
 
     def _init_message_process(self):
         self._message_process = self._create_commander_process()
@@ -152,9 +158,9 @@ class BufferFactory:
         for _ in range(self._buffer_system.cpus):
             producer_process = self._producer_process_class(
                 producer=self._producer,
-                buffer_shape=self._buffer_info.shape,
+                buffer_shapes=self._buffer_info.shapes,
                 buffer_state_memory=self._buffer_state_memory,
-                buffer_memory=self._buffer_memory,
+                buffer_memories=self._buffer_memories,
                 message_queue=self._message_queue,
             )
             producer_processes.append(producer_process)

@@ -10,8 +10,8 @@ from example.commander import DataCommander
 from example.producer import DataProducer
 
 CPUS = 6
-BUFFER_SHAPE = (12, 284, 284, 3)
-TIMES = [1, 5, 1, 4, 1, 1, 2, 4, 2, 4]
+BUFFER_SHAPES = ((12, 284, 284, 3), (12, 284, 284))
+TIMES = [[1, 5, 1, 4, 1, 1, 2, 4, 2, 4], [2, 6, 2, 5, 2, 2, 3, 5, 3, 5]]
 
 
 class TestBufferIterator:
@@ -27,10 +27,10 @@ class TestBufferIterator:
         buffer_system = BufferSystem(
             cpus=CPUS, context=context, deterministic=deterministic
         )
-        buffer_info = BufferInfo(count=count, shape=BUFFER_SHAPE)
+        buffer_info = BufferInfo(count=count, shapes=BUFFER_SHAPES)
 
         commander = DataCommander(times=TIMES)
-        producer = DataProducer(data_shape=BUFFER_SHAPE)
+        producer = DataProducer(data_shapes=BUFFER_SHAPES)
 
         buffer_factory = BufferFactory(
             buffer_system=buffer_system,
@@ -43,7 +43,8 @@ class TestBufferIterator:
             for index in range(10):
                 data = next(data_buffer_iterator)
                 if deterministic:
-                    assert np.all(data == TIMES[index])
+                    assert np.all(data[0] == TIMES[0][index])
+                    assert np.all(data[1] == TIMES[1][index])
 
     def test_buffer_iterator_fork(self):
         context = ForkContext()
@@ -79,11 +80,11 @@ class TestBufferIterator:
 
     def test_iterator_factory(self):
         commander = DataCommander(times=TIMES)
-        producer = DataProducer(data_shape=BUFFER_SHAPE)
+        producer = DataProducer(data_shapes=BUFFER_SHAPES)
         deterministic = True
         buffer_iterator = buffer_iterator_factory(
             cpus=CPUS,
-            buffer_shape=BUFFER_SHAPE,
+            buffer_shapes=BUFFER_SHAPES,
             commander=commander,
             producer=producer,
             context="spawn",
@@ -93,4 +94,5 @@ class TestBufferIterator:
         for index in range(10):
             data = next(buffer_iterator)
             if deterministic:
-                assert np.all(data == TIMES[index])
+                assert np.all(data[0] == TIMES[0][index])
+                assert np.all(data[1] == TIMES[1][index])

@@ -9,7 +9,7 @@ class DataCommander(Commander):
         self._times = times
 
     def create_message(self):
-        message = {"value": self._times[self._index], "time": self._times[self._index]}
-        self._index = (self._index + 1) % len(self._times)
+        message = {"values": (self._times[0][self._index], self._times[1][self._index])}
+        self._index = (self._index + 1) % len(self._times[0])
         return message
         

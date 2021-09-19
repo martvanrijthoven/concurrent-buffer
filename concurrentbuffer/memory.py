@@ -1,5 +1,5 @@
 from multiprocessing.shared_memory import SharedMemory
-from typing import List
+from typing import Dict
 
 import numpy as np
 
@@ -7,7 +7,7 @@ import numpy as np
 class BufferMemory:
     """Class that contains the buffers
     """
-    def __init__(self, shape: tuple, dtype: type, buffers: List[SharedMemory]):
+    def __init__(self, shape: tuple, dtype: type, buffers: Dict[int, SharedMemory]):
         """INit
 
         Args:
