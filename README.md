@@ -40,7 +40,7 @@ Important note:
     cpus = 8
 
     # the buffershape in the shared memory
-    buffer_shape = (64, 256, 256, 3)
+    buffer_shapes = ((64, 256, 256, 3),)
     
     # the context of multiprocess (spawn or fork)
     context = 'spawn'
@@ -54,7 +54,7 @@ Important note:
 
     # You will have to create your own Producer class, please see instructions below
     # a user defined producer, should subclass the Producer class
-    producer = DataProducer(data_shape=buffer_shape)
+    producer = DataProducer(data_shapes=buffer_shapes)
 
     # create a buffer iterator
     buffer_iterator = buffer_iterator_factory(
@@ -92,7 +92,7 @@ from concurrentbuffer.system import BufferSystem
 cpus = 8
 
 # the buffershape in the shared memory
-buffer_shape = (64, 256, 256, 3)
+buffer_shapes = ((64, 256, 256, 3),)
 
 # the context of multiprocess (spawn or fork)
 context = SpawnContext()
@@ -109,7 +109,7 @@ buffer_system = BufferSystem(
 )
 
 # buffer info contains the information of the buffers 
-buffer_info = BufferInfo(count=count, shape=buffer_shape)
+buffer_info = BufferInfo(count=count, shapes=buffer_shapes)
 
 # You will have to create your own Commander class, please see instructions below
 # a user defined commander, should subclass the Commander class
@@ -117,7 +117,7 @@ commander = IndexCommander(max_index=10)
 
 # You will have to create your own Producer class, please see instructions below
 # a user defined producer, should subclass the Producer class
-producer = DataProducer(data_shape=buffer_shape)
+producer = DataProducer(data_shapes=buffer_shapes)
 
 # a factor class that builds the buffer components
 buffer_factory = BufferFactory(
@@ -156,8 +156,8 @@ import numpy as np
 from concurrentbuffer.producer import Producer
 
 class DataProducer(Producer):
-    def __init__(self, data_shape: tuple):
-        self._data_shape = data_shape
+    def __init__(self, data_shapes: tuple):
+        self._data_shapes = data_shapes
 
     def create_data(self, message: dict) -> np.ndarray:
         index = message['index']
