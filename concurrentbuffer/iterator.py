@@ -51,7 +51,7 @@ class BufferIterator(Iterator):
         
         data = []
         for buffer_memory in self._buffer_factory.buffer_memories:
-            data.append(buffer_memory.get_buffer(buffer_id=buffer_id).squeeze())
+            data.append(buffer_memory.get_buffer(buffer_id=buffer_id))
         return data
 
     def _next_deterministic(self) -> int:
