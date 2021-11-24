@@ -67,7 +67,7 @@ Important note:
         deterministic=deterministic,
     )
 
-    # loop through the buffer that is filled concurrently at the same time
+    # loop through the buffer that is filled concurrently
     for index in range(10):
         data = next(buffer_iterator)
         
