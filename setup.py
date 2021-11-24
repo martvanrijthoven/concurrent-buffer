@@ -1,9 +1,9 @@
 from setuptools import setup
 
-# read the contents of your README file
-from pathlib import Path
-this_directory = Path(__file__).parent
-long_description = (this_directory / "README.md").read_text()
+# # read the contents of your README file
+# from pathlib import Path
+# this_directory = Path(__file__).parent
+# long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='concurrentbuffer',
@@ -13,6 +13,5 @@ setup(
     packages=['concurrentbuffer'],
     license='LICENSE.txt',
     install_requires=['numpy>=1.18.1'],
-    long_description=long_description,
     url='https://github.com/martvanrijthoven/concurrent-buffer'
 )
