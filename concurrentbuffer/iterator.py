@@ -84,6 +84,7 @@ def buffer_iterator_factory(
     producer: Producer,
     context: str,
     deterministic: bool,
+    buffer_dtype: type = np.uint16,
     buffer_iterator_class: type = BufferIterator,
     *args,
     **kwargs
@@ -95,7 +96,7 @@ def buffer_iterator_factory(
         cpus=cpus, context=mp_context, deterministic=deterministic
     )
 
-    buffer_info = BufferInfo(count=count, shapes=buffer_shapes)
+    buffer_info = BufferInfo(count=count, shapes=buffer_shapes, dtype=buffer_dtype)
 
     buffer_factory = BufferFactory(
         buffer_system=buffer_system,
