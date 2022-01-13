@@ -5,7 +5,7 @@
 [![tests](https://github.com/martvanrijthoven/concurrent-buffer/actions/workflows/tests.yml/badge.svg)](https://github.com/martvanrijthoven/concurrent-buffer/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/martvanrijthoven/concurrent-buffer/branch/main/graph/badge.svg?token=0619Z63PMA)](https://codecov.io/gh/martvanrijthoven/concurrent-buffer)
 [![docs](https://github.com/martvanrijthoven/concurrent-buffer/actions/workflows/docs.yml/badge.svg)](https://github.com/martvanrijthoven/concurrent-buffer/actions/workflows/docs.yml)
-![codeinspector](https://api.codiga.io/project/26325/score/svg)
+[![codeinspector](https://api.codiga.io/project/26325/score/svg)](https://app.codiga.io/public/project/26325/concurrent-buffer/dashboard)
 
 
 
