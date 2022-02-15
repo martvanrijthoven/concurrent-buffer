@@ -60,7 +60,7 @@ Important note:
     # create a buffer iterator
     buffer_iterator = buffer_iterator_factory(
         cpus=cpus,
-        buffer_shape=buffer_shape,
+        buffer_shapes=buffer_shapes,
         commander=commander,
         producer=producer,
         context=context,
