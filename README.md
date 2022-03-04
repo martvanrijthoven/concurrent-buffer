@@ -5,7 +5,7 @@
 [![tests](https://github.com/martvanrijthoven/concurrent-buffer/actions/workflows/tests.yml/badge.svg)](https://github.com/martvanrijthoven/concurrent-buffer/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/martvanrijthoven/concurrent-buffer/branch/main/graph/badge.svg?token=0619Z63PMA)](https://codecov.io/gh/martvanrijthoven/concurrent-buffer)
 [![docs](https://github.com/martvanrijthoven/concurrent-buffer/actions/workflows/docs.yml/badge.svg)](https://github.com/martvanrijthoven/concurrent-buffer/actions/workflows/docs.yml)
-[![codeinspector](https://www.code-inspector.com/project/26325/score/svg)](https://frontend.code-inspector.com/project/26325/dashboard)
+[![codeinspector](https://api.codiga.io/project/26325/score/svg)](https://app.codiga.io/public/project/26325/concurrent-buffer/dashboard)
 
 
 
@@ -60,7 +60,7 @@ Important note:
     # create a buffer iterator
     buffer_iterator = buffer_iterator_factory(
         cpus=cpus,
-        buffer_shape=buffer_shape,
+        buffer_shapes=buffer_shapes,
         commander=commander,
         producer=producer,
         context=context,
