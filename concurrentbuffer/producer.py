@@ -1,6 +1,19 @@
+import sys
 from abc import abstractmethod
 from multiprocessing import Queue
-from multiprocessing.context import ForkContext, ForkProcess, SpawnContext, SpawnProcess
+
+WINDOWS = sys.platform == "win32"
+
+if not WINDOWS:
+    from multiprocessing.context import (
+        ForkContext,
+        ForkProcess,
+        SpawnContext,
+        SpawnProcess,
+    )
+else:
+    from multiprocessing.context import SpawnContext, SpawnProcess
+
 from typing import List
 
 import numpy as np
@@ -64,14 +77,6 @@ class ProducerProcess:
             self._buffer_state_memory.update_buffer_id_to_available(buffer_id=buffer_id)
 
 
-class ProducerForkProcess(ProducerProcess, ForkProcess):
-    """Producer class based on multiprocessing fork context process"""
-
-    def __init__(self, *args, **kwargs):
-        ForkProcess.__init__(self)
-        ProducerProcess.__init__(self, *args, **kwargs)
-
-
 class ProducerSpawnProcess(ProducerProcess, SpawnProcess):
     """Producer class based on multiprocessing spawn context process"""
 
@@ -80,10 +85,25 @@ class ProducerSpawnProcess(ProducerProcess, SpawnProcess):
         ProducerProcess.__init__(self, *args, **kwargs)
 
 
-_CONCRETE_PRODUCER_CONTEXT_PROCESSES = {
-    ForkContext: ProducerForkProcess,
-    SpawnContext: ProducerSpawnProcess,
-}
+if not WINDOWS:
+
+    class ProducerForkProcess(ProducerProcess, ForkProcess):
+        """Producer class based on multiprocessing fork context process"""
+
+        def __init__(self, *args, **kwargs):
+            ForkProcess.__init__(self)
+            ProducerProcess.__init__(self, *args, **kwargs)
+
+    _CONCRETE_PRODUCER_CONTEXT_PROCESSES = {
+        ForkContext: ProducerForkProcess,
+        SpawnContext: ProducerSpawnProcess,
+    }
+
+else:
+    _CONCRETE_PRODUCER_CONTEXT_PROCESSES = {
+        SpawnContext: ProducerSpawnProcess,
+    }
+
 
 def get_producer_process_class_object(context: type) -> type:
     """Factory function for creating a process class object based on a specific context
@@ -101,6 +121,4 @@ def get_producer_process_class_object(context: type) -> type:
     try:
         return _CONCRETE_PRODUCER_CONTEXT_PROCESSES[type(context)]
     except KeyError:
-        raise ValueError(
-            f"cannot find producer process class with context {context}"
-        ) from None
+        raise ValueError(f"cannot find producer process class with context {context}")
