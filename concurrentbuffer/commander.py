@@ -1,7 +1,20 @@
+import sys
 from abc import abstractmethod
 from multiprocessing import Queue
 from multiprocessing.connection import Connection
-from multiprocessing.context import ForkContext, ForkProcess, SpawnContext, SpawnProcess
+
+WINDOWS = sys.platform == "win32"
+
+if not WINDOWS:
+    from multiprocessing.context import (
+        ForkContext,
+        ForkProcess,
+        SpawnContext,
+        SpawnProcess,
+    )
+else:
+    from multiprocessing.context import SpawnContext, SpawnProcess
+
 from typing import Optional
 
 from concurrentbuffer.process import SubProcessObject
@@ -65,14 +78,6 @@ class CommanderProcess:
             self._buffer_id_sender.send(buffer_id)
 
 
-class CommanderForkProcess(CommanderProcess, ForkProcess):
-    """Commander class based on multiprocessing fork context process"""
-
-    def __init__(self, *args, **kwargs):
-        ForkProcess.__init__(self)
-        CommanderProcess.__init__(self, *args, **kwargs)
-
-
 class CommanderSpawnProcess(CommanderProcess, SpawnProcess):
     """Commander class based on multiprocessing spawn context process"""
 
@@ -81,10 +86,24 @@ class CommanderSpawnProcess(CommanderProcess, SpawnProcess):
         CommanderProcess.__init__(self, *args, **kwargs)
 
 
-_concrete_context_processes = {
-    ForkContext: CommanderForkProcess,
-    SpawnContext: CommanderSpawnProcess,
-}
+if not WINDOWS:
+
+    class CommanderForkProcess(CommanderProcess, ForkProcess):
+        """Commander class based on multiprocessing fork context process"""
+
+        def __init__(self, *args, **kwargs):
+            ForkProcess.__init__(self)
+            CommanderProcess.__init__(self, *args, **kwargs)
+
+    _concrete_context_processes = {
+        ForkContext: CommanderForkProcess,
+        SpawnContext: CommanderSpawnProcess,
+    }
+else:
+
+    _concrete_context_processes = {
+        SpawnContext: CommanderSpawnProcess,
+    }
 
 
 def get_commander_process_class_object(context) -> type:
