@@ -173,36 +173,28 @@
                 <span class="n">buffer_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_buffer_id</span>
             <span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_factory</span><span class="o">.</span><span class="n">buffer_system</span><span class="o">.</span><span class="n">deterministic</span><span class="p">:</span>
-            <span class="n">buffer_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_deterministic</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">buffer_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next</span><span class="p">()</span>
-
+        <span class="n">buffer_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_last_buffer_id</span> <span class="o">=</span> <span class="n">buffer_id</span>
-        
+
         <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">buffer_memory</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_factory</span><span class="o">.</span><span class="n">buffer_memories</span><span class="p">:</span>
             <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">buffer_memory</span><span class="o">.</span><span class="n">get_buffer</span><span class="p">(</span><span class="n">buffer_id</span><span class="o">=</span><span class="n">buffer_id</span><span class="p">))</span>
+
         <span class="k">return</span> <span class="n">data</span>
 
-    <span class="k">def</span> <span class="nf">_next_deterministic</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="n">next_buffer_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_factory</span><span class="o">.</span><span class="n">receiver</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
-        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">buffer_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_factory</span><span class="o">.</span><span class="n">buffer_state_memory</span><span class="o">.</span><span class="n">get_available_buffer_id_from_id</span><span class="p">(</span>
-                <span class="n">buffer_id</span><span class="o">=</span><span class="n">next_buffer_id</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="n">buffer_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">continue</span>
-            <span class="k">return</span> <span class="n">buffer_id</span>
-
     <span class="k">def</span> <span class="nf">_next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">next_buffer_id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_factory</span><span class="o">.</span><span class="n">buffer_system</span><span class="o">.</span><span class="n">deterministic</span><span class="p">:</span>
+            <span class="n">next_buffer_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_factory</span><span class="o">.</span><span class="n">receiver</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">buffer_id</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_factory</span><span class="o">.</span><span class="n">buffer_state_memory</span><span class="o">.</span><span class="n">get_available_buffer_id</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_factory</span><span class="o">.</span><span class="n">buffer_state_memory</span><span class="o">.</span><span class="n">get_available_buffer_id</span><span class="p">(</span>
+                    <span class="n">buffer_id</span><span class="o">=</span><span class="n">next_buffer_id</span>
+                <span class="p">)</span>
             <span class="p">)</span>
-            <span class="k">if</span> <span class="n">buffer_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">continue</span>
-            <span class="k">return</span> <span class="n">buffer_id</span>
+            <span class="k">if</span> <span class="n">buffer_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">buffer_id</span>
 
     <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_factory</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span></div>

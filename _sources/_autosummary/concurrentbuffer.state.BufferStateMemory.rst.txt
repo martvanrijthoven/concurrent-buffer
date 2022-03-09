@@ -18,7 +18,6 @@
    
       ~BufferStateMemory.__init__
       ~BufferStateMemory.get_available_buffer_id
-      ~BufferStateMemory.get_available_buffer_id_from_id
       ~BufferStateMemory.get_free_buffer_id
       ~BufferStateMemory.get_state_buffer
       ~BufferStateMemory.update_buffer_id_to_available
