@@ -72,15 +72,15 @@ class BufferFactory:
         self._init_producer_processes()
 
     @property
-    def buffer_system(self):
+    def buffer_system(self) -> BufferSystem:
         return self._buffer_system
 
     @property
-    def buffer_state_memory(self):
+    def buffer_state_memory(self) -> BufferStateMemory:
         return self._buffer_state_memory
 
     @property
-    def buffer_memories(self):
+    def buffer_memories(self) -> List[BufferMemory]:
         return self._buffer_memories
 
     @property

@@ -2,6 +2,7 @@ from enum import Enum
 from functools import wraps
 from multiprocessing import Lock
 from multiprocessing.shared_memory import SharedMemory
+from typing import Optional
 
 import numpy as np
 
@@ -62,20 +63,23 @@ class BufferStateMemory:
         return list(np.where(state_buffer == state.value)[0])
 
     @_lock_state_buffer
-    def _get_buffer_id_with_state(self, state: BufferState, update_state: BufferState):
+    def _get_buffer_id_with_state(
+        self,
+        state: BufferState,
+        update_state: BufferState,
+        buffer_id: Optional[int] = None,
+    ):
         buffer_ids = self._get_buffer_ids_with_state(state=state)
+
         if len(buffer_ids) == 0:
             return None
-        self._update_state_buffer(buffer_id=buffer_ids[0], buffer_state=update_state)
-        return buffer_ids[0]
 
-    @_lock_state_buffer
-    def _from_id_get_buffer_id_with_state(
-        self, buffer_id: int, state: BufferState, update_state: BufferState
-    ):
-        buffer_ids = self._get_buffer_ids_with_state(state)
-        if len(buffer_ids) == 0 or buffer_id not in buffer_ids:
+        if buffer_id is not None and buffer_id not in buffer_ids:
             return None
+
+        if buffer_id is None:
+            buffer_id = buffer_ids[0]
+
         self._update_state_buffer(buffer_id=buffer_id, buffer_state=update_state)
         return buffer_id
 
@@ -88,16 +92,11 @@ class BufferStateMemory:
             state=BufferState.FREE, update_state=BufferState.RESERVED
         )
 
-    def get_available_buffer_id(self):
+    def get_available_buffer_id(self, buffer_id: Optional[int] = None):
         return self._get_buffer_id_with_state(
-            state=BufferState.AVAILABLE, update_state=BufferState.PROCESSING
-        )
-
-    def get_available_buffer_id_from_id(self, buffer_id):
-        return self._from_id_get_buffer_id_with_state(
-            buffer_id=buffer_id,
             state=BufferState.AVAILABLE,
             update_state=BufferState.PROCESSING,
+            buffer_id=buffer_id,
         )
 
     def update_buffer_id_to_free(self, buffer_id):

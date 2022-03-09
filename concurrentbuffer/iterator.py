@@ -42,36 +42,28 @@ class BufferIterator(Iterator):
                 buffer_id=self._last_buffer_id
             )
 
-        if self._buffer_factory.buffer_system.deterministic:
-            buffer_id = self._next_deterministic()
-        else:
-            buffer_id = self._next()
-
+        buffer_id = self._next()
         self._last_buffer_id = buffer_id
-        
+
         data = []
         for buffer_memory in self._buffer_factory.buffer_memories:
             data.append(buffer_memory.get_buffer(buffer_id=buffer_id))
+
         return data
 
-    def _next_deterministic(self) -> int:
-        next_buffer_id = self._buffer_factory.receiver.recv()
-        while True:
-            buffer_id = self._buffer_factory.buffer_state_memory.get_available_buffer_id_from_id(
-                buffer_id=next_buffer_id
-            )
-            if buffer_id is None:
-                continue
-            return buffer_id
-
     def _next(self) -> int:
+        next_buffer_id = None
+        if self._buffer_factory.buffer_system.deterministic:
+            next_buffer_id = self._buffer_factory.receiver.recv()
+
         while True:
             buffer_id = (
-                self._buffer_factory.buffer_state_memory.get_available_buffer_id()
+                self._buffer_factory.buffer_state_memory.get_available_buffer_id(
+                    buffer_id=next_buffer_id
+                )
             )
-            if buffer_id is None:
-                continue
-            return buffer_id
+            if buffer_id is not None:
+                return buffer_id
 
     def stop(self):
         self._buffer_factory.shutdown()
