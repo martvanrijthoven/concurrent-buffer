@@ -129,10 +129,23 @@
               <div>
                 
   <h1>Source code for concurrentbuffer.commander</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
 <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Queue</span>
 <span class="kn">from</span> <span class="nn">multiprocessing.connection</span> <span class="kn">import</span> <span class="n">Connection</span>
-<span class="kn">from</span> <span class="nn">multiprocessing.context</span> <span class="kn">import</span> <span class="n">ForkContext</span><span class="p">,</span> <span class="n">ForkProcess</span><span class="p">,</span> <span class="n">SpawnContext</span><span class="p">,</span> <span class="n">SpawnProcess</span>
+
+<span class="n">WINDOWS</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">WINDOWS</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">multiprocessing.context</span> <span class="kn">import</span> <span class="p">(</span>
+        <span class="n">ForkContext</span><span class="p">,</span>
+        <span class="n">ForkProcess</span><span class="p">,</span>
+        <span class="n">SpawnContext</span><span class="p">,</span>
+        <span class="n">SpawnProcess</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">multiprocessing.context</span> <span class="kn">import</span> <span class="n">SpawnContext</span><span class="p">,</span> <span class="n">SpawnProcess</span>
+
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">concurrentbuffer.process</span> <span class="kn">import</span> <span class="n">SubProcessObject</span>
@@ -196,14 +209,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_id_sender</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">buffer_id</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="CommanderForkProcess"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.commander.CommanderForkProcess.html#concurrentbuffer.commander.CommanderForkProcess">[docs]</a><span class="k">class</span> <span class="nc">CommanderForkProcess</span><span class="p">(</span><span class="n">CommanderProcess</span><span class="p">,</span> <span class="n">ForkProcess</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Commander class based on multiprocessing fork context process&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="CommanderForkProcess.__init__"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.commander.CommanderForkProcess.html#concurrentbuffer.commander.CommanderForkProcess.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">ForkProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="n">CommanderProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
-
-
 <div class="viewcode-block" id="CommanderSpawnProcess"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.commander.CommanderSpawnProcess.html#concurrentbuffer.commander.CommanderSpawnProcess">[docs]</a><span class="k">class</span> <span class="nc">CommanderSpawnProcess</span><span class="p">(</span><span class="n">CommanderProcess</span><span class="p">,</span> <span class="n">SpawnProcess</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Commander class based on multiprocessing spawn context process&quot;&quot;&quot;</span>
 
@@ -212,10 +217,24 @@
         <span class="n">CommanderProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 
-<span class="n">_concrete_context_processes</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="n">ForkContext</span><span class="p">:</span> <span class="n">CommanderForkProcess</span><span class="p">,</span>
-    <span class="n">SpawnContext</span><span class="p">:</span> <span class="n">CommanderSpawnProcess</span><span class="p">,</span>
-<span class="p">}</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">WINDOWS</span><span class="p">:</span>
+
+<div class="viewcode-block" id="CommanderForkProcess"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.commander.CommanderForkProcess.html#concurrentbuffer.commander.CommanderForkProcess">[docs]</a>    <span class="k">class</span> <span class="nc">CommanderForkProcess</span><span class="p">(</span><span class="n">CommanderProcess</span><span class="p">,</span> <span class="n">ForkProcess</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Commander class based on multiprocessing fork context process&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CommanderForkProcess.__init__"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.commander.CommanderForkProcess.html#concurrentbuffer.commander.CommanderForkProcess.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">ForkProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">CommanderProcess</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+    <span class="n">_concrete_context_processes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">ForkContext</span><span class="p">:</span> <span class="n">CommanderForkProcess</span><span class="p">,</span>
+        <span class="n">SpawnContext</span><span class="p">:</span> <span class="n">CommanderSpawnProcess</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="k">else</span><span class="p">:</span>
+
+    <span class="n">_concrete_context_processes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">SpawnContext</span><span class="p">:</span> <span class="n">CommanderSpawnProcess</span><span class="p">,</span>
+    <span class="p">}</span>
 
 
 <div class="viewcode-block" id="get_commander_process_class_object"><a class="viewcode-back" href="../../_autosummary/concurrentbuffer.commander.get_commander_process_class_object.html#concurrentbuffer.commander.get_commander_process_class_object">[docs]</a><span class="k">def</span> <span class="nf">get_commander_process_class_object</span><span class="p">(</span><span class="n">context</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
