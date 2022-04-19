@@ -42,7 +42,7 @@ jobs:
         run: |
           pip install pytest
           pip install coveralls
-          pytest --cov=./concurrentbuffer --cov-report 
+          pytest --cov=./concurrentbuffer --cov-report term-missing
 
       - name: Upload coverage
         env:
