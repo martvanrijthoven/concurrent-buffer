@@ -1,4 +1,10 @@
+import sys
 from multiprocessing.context import BaseContext, ForkContext, SpawnContext
+
+WINDOWS = sys.platform == "win32"
+
+if not WINDOWS:
+    from multiprocessing.context import ForkContext
 
 import numpy as np
 from concurrentbuffer.factory import BufferFactory
@@ -46,25 +52,27 @@ class TestBufferIterator:
                     assert np.all(data[0] == TIMES[0][index])
                     assert np.all(data[1] == TIMES[1][index])
 
-    def test_buffer_iterator_fork(self):
-        context = ForkContext()
-        deterministic = False
-        self._iterating(
-            context=context,
-            deterministic=deterministic,
-        )
+    if not WINDOWS:
+        def test_buffer_iterator_fork(self):
+            context = ForkContext()
+            deterministic = False
+            self._iterating(
+                context=context,
+                deterministic=deterministic,
+            )
+        
+
+        def test_buffer_iterator_deterministic_fork(self):
+            context = ForkContext()
+            deterministic = True
+            self._iterating(
+                context=context,
+                deterministic=deterministic,
+            )
 
     def test_buffer_iterator_spawn(self):
         context = SpawnContext()
         deterministic = False
-        self._iterating(
-            context=context,
-            deterministic=deterministic,
-        )
-
-    def test_buffer_iterator_deterministic_fork(self):
-        context = ForkContext()
-        deterministic = True
         self._iterating(
             context=context,
             deterministic=deterministic,

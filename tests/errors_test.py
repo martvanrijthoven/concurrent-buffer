@@ -1,3 +1,10 @@
+import sys
+WINDOWS = sys.platform == "win32"
+
+if not WINDOWS:
+    from multiprocessing.context import ForkServerContext
+
+
 from multiprocessing.context import ForkServerContext
 
 from concurrentbuffer.commander import get_commander_process_class_object
@@ -32,11 +39,11 @@ class TestErrors:
             shared_buffer_manager = SharedBufferManager(buffer_info=buffer_info)
             _ = shared_buffer_manager.state_buffer
 
+    if not WINDOWS:
+        def test_get_commander_process_class_object(self):
+            with raises(ValueError):
+                get_commander_process_class_object(ForkServerContext)
 
-    def test_get_commander_process_class_object(self):
-        with raises(ValueError):
-            get_commander_process_class_object(ForkServerContext)
-
-    def test_get_producer_process_class_object(self):
-        with raises(ValueError):
-            get_producer_process_class_object(ForkServerContext)
+        def test_get_producer_process_class_object(self):
+            with raises(ValueError):
+                get_producer_process_class_object(ForkServerContext)
