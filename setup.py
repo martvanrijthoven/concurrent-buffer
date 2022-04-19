@@ -7,7 +7,7 @@ from setuptools import setup
 
 setup(
     name='concurrentbuffer',
-    version='0.0.6',
+    version='0.0.7',
     author='Mart van Rijthoven',
     author_email='mart.vanrijthoven@gmail.com',
     packages=['concurrentbuffer'],

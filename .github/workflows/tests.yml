@@ -19,7 +19,12 @@ env:
 
 jobs:
   tests:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+
     steps:
       - uses: actions/checkout@v2
 
@@ -36,12 +41,22 @@ jobs:
       - name: Generate coverage report
         run: |
           pip install pytest
-          pip install pytest-cov
-          pytest --cov=./concurrentbuffer --cov-report=xml
+          pip install coveralls
+          coverage run --source=concurrentbuffer -m pytest tests/
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+      - name: Coveralls Parallel
+        uses: coverallsapp/github-action@master
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
-          verbose: true
+          github-token: ${{ secrets.github_token }}
+          flag-name: run-${{ matrix.test_number }}
+          parallel: true
+
+  finish:
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        parallel-finished: true
