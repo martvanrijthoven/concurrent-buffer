@@ -1,5 +1,5 @@
 import sys
-from multiprocessing.context import BaseContext, ForkContext, SpawnContext
+from multiprocessing.context import BaseContext, SpawnContext
 
 WINDOWS = sys.platform == "win32"
 
