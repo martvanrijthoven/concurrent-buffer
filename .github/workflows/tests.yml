@@ -43,7 +43,7 @@ jobs:
           pip install pytest
           pip install pytest-cov
           pip install coveralls
-          pytest concurrent-buffer/tests tests --cov --cov-report term-missing
+          pytest tests tests --cov --cov-report term-missing
 
       - name: Upload coverage
         env:
