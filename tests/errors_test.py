@@ -4,9 +4,6 @@ WINDOWS = sys.platform == "win32"
 if not WINDOWS:
     from multiprocessing.context import ForkServerContext
 
-
-from multiprocessing.context import ForkServerContext
-
 from concurrentbuffer.commander import get_commander_process_class_object
 from concurrentbuffer.info import BufferInfo
 from concurrentbuffer.manager import (SharedBufferManager,
