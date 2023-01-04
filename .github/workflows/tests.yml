@@ -41,7 +41,7 @@ jobs:
       - name: Generate coverage report
         run: |
           pip install pytest
-          pip install pytest-cov
+          pip install pytest-cov===2.8.1
           pip install coveralls
           pytest tests tests --cov --cov-report term-missing
 
