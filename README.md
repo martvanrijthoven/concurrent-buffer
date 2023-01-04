@@ -4,7 +4,6 @@
 [![PyPI version](https://badge.fury.io/py/concurrentbuffer.svg)](https://badge.fury.io/py/concurrentbuffer)
 [![tests](https://github.com/martvanrijthoven/concurrent-buffer/actions/workflows/tests.yml/badge.svg)](https://github.com/martvanrijthoven/concurrent-buffer/actions/workflows/tests.yml)
 [![Coverage Status](https://coveralls.io/repos/github/martvanrijthoven/concurrent-buffer/badge.svg?branch=main)](https://coveralls.io/github/martvanrijthoven/concurrent-buffer?branch=main)
-[![docs](https://github.com/martvanrijthoven/concurrent-buffer/actions/workflows/docs.yml/badge.svg)](https://github.com/martvanrijthoven/concurrent-buffer/actions/workflows/docs.yml)
 [![codeinspector](https://api.codiga.io/project/34463/score/svg)](https://app.codiga.io/public/project/34463/concurrent-buffer/dashboard)
 
 
