@@ -1,3 +1,4 @@
+import multiprocessing
 from typing import List
 
 import numpy as np
@@ -16,7 +17,7 @@ from concurrentbuffer.producer import (
     ProducerProcess,
     get_producer_process_class_object,
 )
-from concurrentbuffer.state import BufferStateMemory
+from concurrentbuffer.state import BufferState, BufferStateMemory
 from concurrentbuffer.system import BufferSystem
 
 # use spawn with pickable object
@@ -165,3 +166,32 @@ class BufferFactory:
             )
             producer_processes.append(producer_process)
         return producer_processes
+
+
+def create_buffer_factory(
+    cpus,
+    batch_commander,
+    batch_producer,
+    context,
+    deterministic,
+    buffer_shapes,
+    buffer_dtype,
+):
+
+    count = cpus * len(BufferState)
+
+    if isinstance(context, str):
+        context = multiprocessing.get_context(context)
+        
+    buffer_system = BufferSystem(
+        cpus=cpus, context=context, deterministic=deterministic
+    )
+
+    buffer_info = BufferInfo(count=count, shapes=buffer_shapes, dtype=buffer_dtype)
+
+    return BufferFactory(
+        buffer_system=buffer_system,
+        buffer_info=buffer_info,
+        commander=batch_commander,
+        producer=batch_producer,
+    )

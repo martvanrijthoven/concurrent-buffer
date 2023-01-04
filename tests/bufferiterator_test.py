@@ -7,7 +7,7 @@ if not WINDOWS:
     from multiprocessing.context import ForkContext
 
 import numpy as np
-from concurrentbuffer.factory import BufferFactory
+from concurrentbuffer.factory import create_buffer_factory
 from concurrentbuffer.info import BufferInfo
 from concurrentbuffer.iterator import BufferIterator, buffer_iterator_factory
 from concurrentbuffer.state import BufferState
@@ -28,21 +28,16 @@ class TestBufferIterator:
         context: BaseContext = SpawnContext(),
         deterministic: bool = True,
     ):
-
-        count = CPUS * len(BufferState)
-        buffer_system = BufferSystem(
-            cpus=CPUS, context=context, deterministic=deterministic
-        )
-        buffer_info = BufferInfo(count=count, shapes=BUFFER_SHAPES)
-
         commander = DataCommander(times=TIMES)
         producer = DataProducer(data_shapes=BUFFER_SHAPES)
-
-        buffer_factory = BufferFactory(
-            buffer_system=buffer_system,
-            buffer_info=buffer_info,
-            commander=commander,
-            producer=producer,
+        buffer_factory = create_buffer_factory(
+            cpus=CPUS * len(BufferState),
+            batch_commander=commander,
+            batch_producer=producer,
+            context=context,
+            deterministic=deterministic,
+            buffer_shapes=BUFFER_SHAPES,
+            buffer_dtype=np.uint8,
         )
 
         with BufferIterator(buffer_factory=buffer_factory) as data_buffer_iterator:
@@ -53,6 +48,7 @@ class TestBufferIterator:
                     assert np.all(data[1] == TIMES[1][index])
 
     if not WINDOWS:
+
         def test_buffer_iterator_fork(self):
             context = ForkContext()
             deterministic = False
@@ -61,6 +57,13 @@ class TestBufferIterator:
                 deterministic=deterministic,
             )
         
+        def test_buffer_iterator_fork_str(self):
+            context = "fork"
+            deterministic = False
+            self._iterating(
+                context=context,
+                deterministic=deterministic,
+            )
 
         def test_buffer_iterator_deterministic_fork(self):
             context = ForkContext()
@@ -72,6 +75,14 @@ class TestBufferIterator:
 
     def test_buffer_iterator_spawn(self):
         context = SpawnContext()
+        deterministic = False
+        self._iterating(
+            context=context,
+            deterministic=deterministic,
+        )
+
+    def test_buffer_iterator_spawn_str(self):
+        context = "spawn"
         deterministic = False
         self._iterating(
             context=context,
