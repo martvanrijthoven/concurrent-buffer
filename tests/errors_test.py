@@ -1,11 +1,7 @@
 import sys
 
-try:
-    from pytest_cov.embed import cleanup_on_sigterm
-except ImportError:
-    pass
-else:
-    cleanup_on_sigterm()
+from pytest_cov.embed import cleanup_on_sigterm
+cleanup_on_sigterm()
 
 WINDOWS = sys.platform == "win32"
 
