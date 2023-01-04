@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "concurrentbugger/_version.py"
+      - "concurrentbuffer/_version.py"
 
 jobs:
   call-tests:
@@ -15,3 +15,7 @@ jobs:
     uses: ./.github/workflows/pypi.yml
     secrets:
       TWINE_PASS: ${{ secrets.TWINE_PASS }}
+
+  call-release:
+    needs: call-pypi
+    uses: ./.github/workflows/release.yml
