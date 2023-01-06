@@ -7,7 +7,7 @@
 [![codeinspector](https://api.codiga.io/project/34463/score/svg)](https://app.codiga.io/public/project/34463/concurrent-buffer/dashboard)
 
 
-This package offers a concurrent buffer that allows you to parallelize tasks and improve their speed by utilizing multiple CPUs. It's built using Python's multiprocessing package and leverages shared memory, introduced in Python 3.8, to share data between processes. The concurrent buffer is filled with data by "producer" processes, while a "commander" process controls the creation of the data using user-defined dictionary messages. The main process can then consume the data efficiently using a BufferIterator. 
+This package offers a concurrent buffer that allows you to parallelize the creation of [NumPy](https://numpy.org/) arrays by utilizing multiple CPUs. It's built using Python's multiprocessing package and leverages shared memory, introduced in Python 3.8, to share data between processes. The concurrent buffer is filled with data by "producer" processes, while a "commander" process controls the creation of the data using user-defined dictionary messages. The main process can then consume the data efficiently using a BufferIterator. 
 
 Please see below the [installation instructions](#installation-and-dependencies) and an [example](#example-usage) on how to use this package as well as how to [create your own commander](#creating-a-commander) and how to [create your own producer](#creating-a-producer). For more information please see the [docs](https://martvanrijthoven.github.io/concurrent-buffer/). Feel free to open an issue if you have any questions or remarks.
 
