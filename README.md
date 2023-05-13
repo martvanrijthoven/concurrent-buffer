@@ -4,7 +4,6 @@
 [![PyPI](https://img.shields.io/pypi/v/concurrentbuffer)](https://pypi.org/project/concurrentbuffer/)
 [![tests](https://github.com/martvanrijthoven/concurrent-buffer/actions/workflows/tests.yml/badge.svg)](https://github.com/martvanrijthoven/concurrent-buffer/actions/workflows/tests.yml)
 [![Coverage Status](https://coveralls.io/repos/github/martvanrijthoven/concurrent-buffer/badge.svg?branch=main)](https://coveralls.io/github/martvanrijthoven/concurrent-buffer?branch=main)
-[![codeinspector](https://api.codiga.io/project/34463/score/svg)](https://app.codiga.io/public/project/34463/concurrent-buffer/dashboard)
 
 
 This package offers a concurrent buffer that allows you to parallelize the creation of [NumPy](https://numpy.org/) arrays by utilizing multiple CPUs. It's built using Python's multiprocessing package and leverages shared memory, introduced in Python 3.8, to share data between processes. The concurrent buffer is filled with data by "producer" processes, while a "commander" process controls the creation of the data using user-defined dictionary messages. The main process can then consume the data efficiently using a BufferIterator. 
